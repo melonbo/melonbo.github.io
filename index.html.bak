@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
 <meta charset="utf-8">
-<title>ÎÄµµ±êÌâ</title>
+<head>
+<title>www.guliqun.store</title>
 </head>
 <body>
-	<form action="get.php" method="get">channel 01:<br>
-	<input type="text" name="channel-01"><br>
-	<form action="get.php" method="get">channel 02:<br>
-	<input type="text" name="channel-02"><br>
-	<form action="get.php" method="get">channel 03:<br>
-	<input type="text" name="channel-03"><br>
+	<p>video</p>
 	<br>
-	<input type="submit" value="ok">
+	<a href="hhr.flv" download="index.html">download</a>
 	<br><br>
 	
 	<video width="320" height="240" controls="controls">
-  <source src="04.mp4" type="video/mp4" />
+  <source src="hhr.flv" type="video/mp4" />
   </video>
 
 <br><br>
