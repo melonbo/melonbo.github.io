@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" href="$classCRecordItem.html#a5e123974ca6fe63177eb95f10a72ddce" title="记录数据输入" alt="" coords="251,107,539,133"/>
+<area shape="rect" href="$classCRecordItem.html#ab909a95cf7c3cea5b8dddaa949d4fa97" title="改变时间" alt="" coords="617,5,921,32"/>
+<area shape="rect" href="$classCRecordItem.html#a4306acd47db78d167f02f1cd1b224f26" title="更新文件名的时间" alt="" coords="619,56,920,83"/>
+<area shape="rect" href="$classCRecRecord.html#a2b07bf5c46e64329bd5e7eaa136ec26e" title="设置录像状态" alt="" coords="628,107,911,133"/>
+<area shape="rect" href="$classCRecRecord.html#a946a91543f448bdfa66842a7a633453e" title="磁盘剩余么?" alt="" coords="587,157,952,184"/>
+<area shape="rect" href="$classCRecRecord.html#a58e3a3c9100689826c21490261c798e9" title="校验磁盘错误" alt="" coords="605,208,933,235"/>
+</map>

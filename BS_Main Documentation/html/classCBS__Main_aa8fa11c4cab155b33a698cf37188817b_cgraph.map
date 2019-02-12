@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" href="$classCBS__Main.html#a664ca21a2e335ffd997013b71beb6e17" title="停止服务" alt="" coords="215,81,391,108"/>
+<area shape="rect" href="$classCBS__Main.html#a73295851eed1eccfd1463ddd60fe3afb" title="保存设备配置" alt="" coords="201,132,404,159"/>
+<area shape="rect" href="$classCRecRecord.html#a63b69b290eb5c86c39185b9520f0298b" title="CRecRecord::HaltService" alt="" coords="484,56,676,83"/>
+<area shape="rect" href="$classCRecCircleDelPlugins.html#a99933299468fa65fbd77d1ccff5044da" title="停止服务" alt="" coords="455,107,705,133"/>
+<area shape="rect" href="$classCRecordItem.html#abfce0ca7607b48232ad7a51a7d27caf9" title="停止" alt="" coords="755,5,947,32"/>
+<area shape="rect" href="$classCRecordItem.html#adc44aa2f1c6816da0c65093e1332bf8d" title="等待结束" alt="" coords="760,56,941,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#a3005b000e7a65135ae09a09d26be8749" title="结束" alt="" coords="768,107,933,133"/>
+</map>

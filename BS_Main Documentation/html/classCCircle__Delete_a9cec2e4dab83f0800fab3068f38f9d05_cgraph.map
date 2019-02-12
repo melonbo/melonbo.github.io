@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" href="$classCCircle__Delete.html#a79a5bbde5d6373d66d8231a5030f838d" title="计算天数" alt="" coords="504,5,768,32"/>
+<area shape="rect" href="$classCCircle__Delete.html#a89c8971853ba36fe8e8695e7df8f0fba" title="删除最老的一天" alt="" coords="471,56,801,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#a65b06e16c84616f9e188e43c046e36d8" title="删除最小的一天" alt="" coords="851,56,1147,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#aa651685b7644f191e3dcf9f8e1853aab" title="删除这一天" alt="" coords="1196,56,1457,83"/>
+</map>

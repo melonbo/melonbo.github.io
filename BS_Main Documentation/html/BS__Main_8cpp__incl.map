@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" href="$BS__Main_8h.html" title="BS_Main.h" alt="" coords="483,161,571,188"/>
+<area shape="rect" href="$Log_8h.html" title="Log.h" alt="" coords="859,84,915,111"/>
+<area shape="rect" href="$CToMainSocket_8h.html" title="CToMainSocket.h" alt="" coords="173,84,309,111"/>
+<area shape="rect" href="$config_8h.html" title="config.h" alt="" coords="311,239,383,265"/>
+<area shape="rect" href="$NetCommAlarm_8h.html" title="Alarm/NetCommAlarm.h" alt="" coords="435,84,619,111"/>
+<area shape="rect" href="$SerialCommAlarm_8h.html" title="Alarm/SerialCommAlarm.h" alt="" coords="643,84,835,111"/>
+<area shape="rect" href="$CRecRecord_8h.html" title="Record/Record/CRecRecord.h" alt="" coords="1140,161,1359,188"/>
+<area shape="rect" href="$CRecCircleDelPlugins_8h.html" title="Record/CircleDel/CRecCircleDelPlugins.h" alt="" coords="939,84,1229,111"/>
+<area shape="rect" href="$CToClientSocket_8h.html" title="CToClientSocket.h" alt="" coords="5,84,149,111"/>
+<area shape="rect" href="$mainplugin_8h.html" title="mainplugin.h" alt="" coords="197,161,301,188"/>
+<area shape="rect" href="$CRecordItem_8h.html" title="CRecordItem.h" alt="" coords="1171,239,1293,265"/>
+<area shape="rect" href="$CircleDelete_8h.html" title="CircleDelete.h" alt="" coords="996,161,1116,188"/>
+</map>

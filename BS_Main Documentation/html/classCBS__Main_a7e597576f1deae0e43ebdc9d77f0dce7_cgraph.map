@@ -1,0 +1,29 @@
+<map id="G" name="G">
+<area shape="rect" href="$classCNetCommAlarm.html#a2204da0f0aab1db21bf591a3fbd56e07" title="服务初始化" alt="" coords="237,31,459,57"/>
+<area shape="rect" href="$classCRecRecord.html#a250f6f478dc5d90642a4f134b4444aff" title="CRecRecord::InitService" alt="" coords="255,81,441,108"/>
+<area shape="rect" href="$classCRecCircleDelPlugins.html#a3afdcb91fe7e21de989de1e9d41848d2" title="启动服务" alt="" coords="225,132,471,159"/>
+<area shape="rect" href="$classCLog.html#a1b454bf325c2fc76b2ac67e2f795a065" title="CLog::InitService" alt="" coords="280,183,416,209"/>
+<area shape="rect" href="$BS__Main_8cpp.html#af3fb5889190d9f1a67d7ebfbb2a6f200" title="ipcVideoDataCallBack" alt="" coords="264,233,432,260"/>
+<area shape="rect" href="$classCBS__Main.html#a91e82111f1a569a3964ea5204a4d1476" title="装载设备配置" alt="" coords="247,284,449,311"/>
+<area shape="rect" href="$classCToClientSubSocket.html#ae77d74c18478854feda957365100c147" title="服务开始" alt="" coords="248,335,448,361"/>
+<area shape="rect" href="$classCToMainSubSocket.html#a2740b3ff00d9e22870cc9a6e7bce93f4" title="服务开始" alt="" coords="252,385,444,412"/>
+<area shape="rect" href="$classCRecordItem.html#abd52da3de09cfdd58acc51a94c66868f" title="开始" alt="" coords="572,56,727,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#a1c9fb65b7a753e2eeccc7c3bbc2d627d" title="开始" alt="" coords="565,107,733,133"/>
+<area shape="rect" href="$classCCircle__Delete.html#a9cec2e4dab83f0800fab3068f38f9d05" title="删除限制的一天" alt="" coords="827,56,1243,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#a4a8594c3e4c163d8909a46a122c409cc" title="刷新目录信息" alt="" coords="877,107,1192,133"/>
+<area shape="rect" href="$classCCircle__Delete.html#a79a5bbde5d6373d66d8231a5030f838d" title="计算天数" alt="" coords="1325,56,1589,83"/>
+<area shape="rect" href="$classCCircle__Delete.html#a89c8971853ba36fe8e8695e7df8f0fba" title="删除最老的一天" alt="" coords="1292,5,1623,32"/>
+<area shape="rect" href="$classCCircle__Delete.html#a65b06e16c84616f9e188e43c046e36d8" title="删除最小的一天" alt="" coords="1672,5,1968,32"/>
+<area shape="rect" href="$classCCircle__Delete.html#aa651685b7644f191e3dcf9f8e1853aab" title="删除这一天" alt="" coords="2017,5,2279,32"/>
+<area shape="rect" href="$classCCircle__Delete.html#a693ec8d87e409c67fd73985f8508c82c" title="加入录像的一天" alt="" coords="1320,107,1595,133"/>
+<area shape="rect" href="$classCCircle__Delete.html#a27461b5a286b462fbd961358e9b387e3" title="转换时间" alt="" coords="1327,157,1588,184"/>
+<area shape="rect" href="$classCCircle__Delete.html#a471ed5023adfaeccb0852bf295fc4748" title="发现这一天的存在" alt="" coords="1696,107,1944,133"/>
+<area shape="rect" href="$classCLog.html#ae5b8824445ee0c8875edcbc50e17c07b" title="CLog::LoadLog" alt="" coords="589,157,709,184"/>
+<area shape="rect" href="$classCRecRecord.html#ad014d43cf711b073f5de04d7b7a94d9d" title="输入数据" alt="" coords="520,208,779,235"/>
+<area shape="rect" href="$classCToClientSubSocket.html#ae46a0865f0daa71f92e77350d7f41b50" title="发送视频" alt="" coords="532,259,767,285"/>
+<area shape="rect" href="$classCToMainSubSocket.html#a61e34d782a2677c602ac449d0abd403c" title="发送视频" alt="" coords="536,309,763,336"/>
+<area shape="rect" href="$classCRecordItem.html#a41db670480d128ae8e54e7bef60ffe7b" title="输入数据" alt="" coords="903,208,1167,235"/>
+<area shape="rect" href="$classCRecordItem.html#a8cefc25647dfd12422809b3098242342" title="追加到缓冲" alt="" coords="1335,208,1580,235"/>
+<area shape="rect" href="$classCBS__Main.html#a6ce34efe3f8ee8f7c1cc6765e4e9900e" title="复位设备配置" alt="" coords="544,360,755,387"/>
+<area shape="rect" href="$classCBS__Main.html#a73295851eed1eccfd1463ddd60fe3afb" title="保存设备配置" alt="" coords="548,411,751,437"/>
+</map>

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD></HEAD><BODY>
+<OBJECT type="text/site properties">
+<param name="FrameName" value="right">
+</OBJECT>
+<UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Class List"><param name="Local" value="annotated.html"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CBS_Main"><param name="Local" value="classCBS__Main.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CCircle_Delete"><param name="Local" value="classCCircle__Delete.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CCircle_Delete::CIRCLE_DELETE"><param name="Local" value="structCCircle__Delete_1_1CIRCLE__DELETE.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CLog"><param name="Local" value="classCLog.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CNetCommAlarm"><param name="Local" value="classCNetCommAlarm.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CRecCircleDelPlugins"><param name="Local" value="classCRecCircleDelPlugins.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CRecordItem"><param name="Local" value="classCRecordItem.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CRecRecord"><param name="Local" value="classCRecRecord.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CSerialCommAlarm"><param name="Local" value="classCSerialCommAlarm.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CToClientSubSocket"><param name="Local" value="classCToClientSubSocket.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CToMainSubSocket"><param name="Local" value="classCToMainSubSocket.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CRecordItem::FrameInfo"><param name="Local" value="structCRecordItem_1_1FrameInfo.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CRecordItem::RecordPARA"><param name="Local" value="structCRecordItem_1_1RecordPARA.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="tagParaMain"><param name="Local" value="structtagParaMain.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="tagSystemConfig"><param name="Local" value="structtagSystemConfig.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="tagSystemInfo"><param name="Local" value="structtagSystemInfo.html"><param name="ImageNumber" value="11"></OBJECT>
+  </UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="Class Members"><param name="Local" value="functions.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="File List"><param name="Local" value="files.html"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/BS_Main.cpp"><param name="Local" value="BS__Main_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/BS_Main.h"><param name="Local" value="BS__Main_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/config.h"><param name="Local" value="config_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/CToClientSocket.cpp"><param name="Local" value="CToClientSocket_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/CToClientSocket.h"><param name="Local" value="CToClientSocket_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/CToMainSocket.cpp"><param name="Local" value="CToMainSocket_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/CToMainSocket.h"><param name="Local" value="CToMainSocket_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Log.cpp"><param name="Local" value="Log_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Log.h"><param name="Local" value="Log_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/mainplugin.h"><param name="Local" value="mainplugin_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Alarm/NetCommAlarm.cpp"><param name="Local" value="NetCommAlarm_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Alarm/NetCommAlarm.h"><param name="Local" value="NetCommAlarm_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Alarm/SerialCommAlarm.cpp"><param name="Local" value="SerialCommAlarm_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Alarm/SerialCommAlarm.h"><param name="Local" value="SerialCommAlarm_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/CircleDelete.cpp"><param name="Local" value="CircleDelete_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/CircleDelete.h"><param name="Local" value="CircleDelete_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/CRecCircleDelPlugins.cpp"><param name="Local" value="CRecCircleDelPlugins_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/CRecCircleDelPlugins.h"><param name="Local" value="CRecCircleDelPlugins_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/Debug/CCircleDelPlugins.d"><param name="Local" value="CCircleDelPlugins_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/Debug/CircleDelete.d"><param name="Local" value="CircleDelete_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/CircleDel/Debug/CRecCircleDelPlugins.d"><param name="Local" value="CRecCircleDelPlugins_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/CRecordItem.cpp"><param name="Local" value="CRecordItem_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/CRecordItem.h"><param name="Local" value="CRecordItem_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/CRecRecord.cpp"><param name="Local" value="CRecRecord_8cpp.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/CRecRecord.h"><param name="Local" value="CRecRecord_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/Debug/CRecordItem.d"><param name="Local" value="CRecordItem_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/Debug/CRecordPlugins.d"><param name="Local" value="CRecordPlugins_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="src/Record/Record/Debug/CRecRecordPlugins.d"><param name="Local" value="CRecRecordPlugins_8d.html"><param name="ImageNumber" value="11"></OBJECT>
+  </UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="File Members"><param name="Local" value="globals.html"><param name="ImageNumber" value="11"></OBJECT>
+</UL>
+</BODY>
+</HTML>

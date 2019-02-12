@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" href="$mainplugin_8h.html" title="src/mainplugin.h" alt="" coords="292,84,420,111"/>
+<area shape="rect" href="$BS__Main_8cpp.html" title="src/BS_Main.cpp" alt="" coords="413,239,541,265"/>
+<area shape="rect" href="$CToMainSocket_8h.html" title="src/CToMainSocket.h" alt="" coords="88,161,248,188"/>
+<area shape="rect" href="$CToClientSocket_8h.html" title="src/CToClientSocket.h" alt="" coords="272,161,440,188"/>
+<area shape="rect" href="$CToMainSocket_8cpp.html" title="src/CToMainSocket.cpp" alt="" coords="5,239,181,265"/>
+<area shape="rect" href="$CToClientSocket_8cpp.html" title="src/CToClientSocket.cpp" alt="" coords="205,239,389,265"/>
+</map>
