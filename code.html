@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL路径文件浏览器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        folder: '#f59e0b',
+                        file: '#64748b',
+                        code: '#ef4444',
+                        image: '#10b981',
+                        document: '#0ea5e9',
+                        audio: '#8b5cf6',
+                        video: '#ec4899'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .file-hover {
+                @apply hover:bg-primary/5 transition-colors duration-200;
+            }
+            .file-active {
+                @apply bg-primary/10 text-primary font-medium;
+            }
+            .tree-line {
+                @apply border-l-2 border-gray-200 ml-3 pl-6;
+            }
+            .fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部导航 -->
+    <header class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fa fa-server text-primary text-xl"></i>
+                    <h1 class="text-lg font-semibold">URL路径文件浏览器</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4 mt-2 sm:mt-0 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="baseUrl" 
+                               class="w-full pl-3 pr-8 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                               placeholder="输入基础URL" value="https://example.com/assets/">
+                        <button id="fetchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <button id="refreshBtn" class="p-2 rounded hover:bg-gray-100 transition-colors">
+                        <i class="fa fa-refresh text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 状态和统计信息 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex flex-wrap items-center justify-between">
+                <div class="flex items-center space-x-4 mb-4 sm:mb-0">
+                    <div id="statusIndicator" class="flex items-center">
+                        <span id="statusIcon" class="w-2 h-2 rounded-full bg-yellow-500 mr-2 animate-pulse"></span>
+                        <span id="statusText" class="text-sm text-gray-600">准备连接到URL...</span>
+                    </div>
+                    
+                    <div id="stats" class="text-sm text-gray-500 hidden">
+                        <span><i class="fa fa-folder text-folder mr-1"></i> <span id="folderCount">0</span> 个文件夹</span>
+                        <span class="mx-3">|</span>
+                        <span><i class="fa fa-file text-file mr-1"></i> <span id="fileCount">0</span> 个文件</span>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button id="viewGrid" class="p-1.5 rounded bg-primary/10 text-primary">
+                        <i class="fa fa-th-large"></i>
+                    </button>
+                    <button id="viewList" class="p-1.5 rounded hover:bg-gray-100">
+                        <i class="fa fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文件列表区域 -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <!-- 加载状态 -->
+            <div id="loadingView" class="p-12 text-center">
+                <div class="inline-block w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                <p class="text-gray-500">正在检索URL路径下的内容...</p>
+            </div>
+            
+            <!-- 错误状态 -->
+            <div id="errorView" class="p-12 text-center hidden">
+                <i class="fa fa-exclamation-triangle text-yellow-500 text-4xl mb-4"></i>
+                <p class="text-gray-700 font-medium mb-2" id="errorMessage">无法访问指定URL</p>
+                <p class="text-gray-500">请检查URL是否正确或是否有权限访问</p>
+            </div>
+            
+            <!-- 空目录状态 -->
+            <div id="emptyView" class="p-12 text-center hidden">
+                <i class="fa fa-folder-open-o text-gray-300 text-4xl mb-4"></i>
+                <p class="text-gray-500">该URL路径下没有文件或文件夹</p>
+            </div>
+            
+            <!-- 文件列表视图 -->
+            <div id="fileListView" class="p-4 hidden">
+                <ul id="fileTree" class="file-tree"></ul>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-white border-t border-gray-200 mt-8 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-500">
+            <p>URL路径文件浏览器 | 显示指定URL同级路径下的所有文件和文件夹</p>
+        </div>
+    </footer>
+
+    <script>
+        // 文件类型图标映射表
+        const fileTypeConfig = {
+            'default': { icon: 'fa-file', color: 'text-file' },
+            'html': { icon: 'fa-file-html-o', color: 'text-code' },
+            'css': { icon: 'fa-file-code-o', color: 'text-code' },
+            'js': { icon: 'fa-file-code-o', color: 'text-code' },
+            'json': { icon: 'fa-file-code-o', color: 'text-code' },
+            'png': { icon: 'fa-file-image-o', color: 'text-image' },
+            'jpg': { icon: 'fa-file-image-o', color: 'text-image' },
+            'jpeg': { icon: 'fa-file-image-o', color: 'text-image' },
+            'gif': { icon: 'fa-file-image-o', color: 'text-image' },
+            'pdf': { icon: 'fa-file-pdf-o', color: 'text-red-500' },
+            'txt': { icon: 'fa-file-text-o', color: 'text-document' },
+            'md': { icon: 'fa-file-text-o', color: 'text-document' },
+            'mp3': { icon: 'fa-file-audio-o', color: 'text-audio' },
+            'mp4': { icon: 'fa-file-video-o', color: 'text-video' }
+        };
+
+        // DOM元素引用
+        const baseUrlInput = document.getElementById('baseUrl');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const stats = document.getElementById('stats');
+        const folderCountEl = document.getElementById('folderCount');
+        const fileCountEl = document.getElementById('fileCount');
+        const loadingView = document.getElementById('loadingView');
+        const errorView = document.getElementById('errorView');
+        const errorMessageEl = document.getElementById('errorMessage');
+        const emptyView = document.getElementById('emptyView');
+        const fileListView = document.getElementById('fileListView');
+        const fileTree = document.getElementById('fileTree');
+        const viewGridBtn = document.getElementById('viewGrid');
+        const viewListBtn = document.getElementById('viewList');
+
+        // 计数器
+        let folderCount = 0;
+        let fileCount = 0;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 事件监听
+            fetchBtn.addEventListener('click', fetchUrlDirectory);
+            refreshBtn.addEventListener('click', fetchUrlDirectory);
+            viewGridBtn.addEventListener('click', () => switchView('grid'));
+            viewListBtn.addEventListener('click', () => switchView('list'));
+            baseUrlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') fetchUrlDirectory();
+            });
+            
+            // 自动加载示例URL
+            setTimeout(fetchUrlDirectory, 800);
+        });
+
+        // 从指定URL检索目录内容
+        function fetchUrlDirectory() {
+            // 获取并验证URL
+            const baseUrl = baseUrlInput.value.trim();
+            if (!baseUrl) {
+                showError('请输入有效的URL');
+                return;
+            }
+            
+            // 重置状态
+            resetViews();
+            folderCount = 0;
+            fileCount = 0;
+            
+            // 显示加载状态
+            loadingView.classList.remove('hidden');
+            statusIcon.className = 'w-2 h-2 rounded-full bg-yellow-500 mr-2 animate-pulse';
+            statusText.textContent = `正在检索 ${baseUrl} ...`;
+            
+            // 调用API获取目录内容
+            // 注意：实际应用中需要后端服务支持跨域请求
+            fetch('/api/directory?url=' + encodeURIComponent(baseUrl))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 成功获取数据后渲染
+                    if (data.success && data.items) {
+                        renderFileList(data.items);
+                        
+                        // 更新状态
+                        statusIcon.className = 'w-2 h-2 rounded-full bg-green-500 mr-2';
+                        statusText.textContent = `已检索 ${baseUrl}`;
+                        stats.classList.remove('hidden');
+                        folderCountEl.textContent = folderCount;
+                        fileCountEl.textContent = fileCount;
+                        
+                        // 显示结果
+                        loadingView.classList.add('hidden');
+                        if (folderCount + fileCount === 0) {
+                            emptyView.classList.remove('hidden');
+                        } else {
+                            fileListView.classList.remove('hidden');
+                        }
+                    } else {
+                        throw new Error(data.message || '获取目录数据失败');
+                    }
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error('检索目录失败:', error);
+                    showError(error.message || '无法检索指定URL的内容');
+                });
+        }
+
+        // 渲染文件列表
+        function renderFileList(items, parentElement = fileTree) {
+            // 清空容器
+            parentElement.innerHTML = '';
+            
+            // 分离文件夹和文件，先显示文件夹
+            const folders = items.filter(item => item.type === 'folder');
+            const files = items.filter(item => item.type === 'file');
+            
+            // 渲染所有文件夹
+            folders.forEach(folder => {
+                folderCount++;
+                renderFolder(folder, parentElement);
+            });
+            
+            // 渲染所有文件
+            files.forEach(file => {
+                fileCount++;
+                renderFile(file, parentElement);
+            });
+        }
+
+        // 渲染文件夹
+        function renderFolder(folder, parentElement) {
+            const folderLi = document.createElement('li');
+            folderLi.className = 'mb-2 fade-in';
+            
+            const folderDiv = document.createElement('div');
+            folderDiv.className = 'folder-item flex items-center justify-between p-2 rounded-md cursor-pointer file-hover';
+            folderDiv.setAttribute('data-folder', folder.name);
+            
+            // 文件夹图标和名称
+            const folderContent = document.createElement('div');
+            folderContent.className = 'flex items-center';
+            
+            const folderIcon = document.createElement('i');
+            folderIcon.className = 'fa fa-folder text-folder mr-3 w-5 text-center transition-transform duration-300';
+            
+            const folderName = document.createElement('span');
+            folderName.textContent = folder.name;
+            
+            folderContent.appendChild(folderIcon);
+            folderContent.appendChild(folderName);
+            
+            // 文件夹信息
+            const folderInfo = document.createElement('div');
+            folderInfo.className = 'text-sm text-gray-500';
+            folderInfo.textContent = `${folder.children ? folder.children.length : 0} 个项目`;
+            
+            folderDiv.appendChild(folderContent);
+            folderDiv.appendChild(folderInfo);
+            
+            // 文件夹展开/折叠功能
+            folderDiv.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (content) {
+                    content.classList.toggle('hidden');
+                    icon.style.transform = content.classList.contains('hidden') ? 'rotate(0)' : 'rotate(90deg)';
+                }
+            });
+            
+            folderLi.appendChild(folderDiv);
+            
+            // 如果有子项，创建子列表
+            if (folder.children && folder.children.length > 0) {
+                const childrenUl = document.createElement('ul');
+                childrenUl.className = 'folder-content tree-line hidden mt-1';
+                renderFileList(folder.children, childrenUl);
+                folderLi.appendChild(childrenUl);
+            }
+            
+            parentElement.appendChild(folderLi);
+        }
+
+        // 渲染文件
+        function renderFile(file, parentElement) {
+            const fileLi = document.createElement('li');
+            fileLi.className = 'mb-1 fade-in';
+            
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'file-item flex items-center justify-between p-2 rounded-md cursor-pointer file-hover';
+            fileDiv.setAttribute('data-file', file.name);
+            
+            // 文件图标和名称
+            const fileContent = document.createElement('div');
+            fileContent.className = 'flex items-center';
+            
+            // 确定文件类型图标
+            const ext = file.name.split('.').pop()?.toLowerCase() || '';
+            const fileType = fileTypeConfig[ext] || fileTypeConfig['default'];
+            
+            const fileIcon = document.createElement('i');
+            fileIcon.className = `fa ${fileType.icon} ${fileType.color} mr-3 w-5 text-center`;
+            
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            
+            fileContent.appendChild(fileIcon);
+            fileContent.appendChild(fileName);
+            
+            // 文件信息（大小）
+            const fileInfo = document.createElement('div');
+            fileInfo.className = 'text-sm text-gray-500';
+            fileInfo.textContent = formatFileSize(file.size) || '未知大小';
+            
+            fileDiv.appendChild(fileContent);
+            fileDiv.appendChild(fileInfo);
+            
+            // 文件点击效果
+            fileDiv.addEventListener('click', function() {
+                document.querySelectorAll('.file-item, .folder-item').forEach(el => {
+                    el.classList.remove('file-active');
+                });
+                this.classList.add('file-active');
+            });
+            
+            // 文件链接（如果提供了URL）
+            if (file.url) {
+                fileDiv.addEventListener('dblclick', function() {
+                    window.open(file.url, '_blank');
+                });
+            }
+            
+            fileLi.appendChild(fileDiv);
+            parentElement.appendChild(fileLi);
+        }
+
+        // 切换视图模式（列表/网格）
+        function switchView(viewType) {
+            if (viewType === 'grid') {
+                viewGridBtn.classList.add('bg-primary/10', 'text-primary');
+                viewListBtn.classList.remove('bg-primary/10', 'text-primary');
+                fileTree.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'gap-3');
+                fileTree.classList.remove('space-y-1');
+            } else {
+                viewListBtn.classList.add('bg-primary/10', 'text-primary');
+                viewGridBtn.classList.remove('bg-primary/10', 'text-primary');
+                fileTree.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'gap-3');
+                fileTree.classList.add('space-y-1');
+            }
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            resetViews();
+            loadingView.classList.add('hidden');
+            errorView.classList.remove('hidden');
+            errorMessageEl.textContent = message;
+            
+            statusIcon.className = 'w-2 h-2 rounded-full bg-red-500 mr-2';
+            statusText.textContent = '检索失败';
+        }
+
+        // 重置所有视图
+        function resetViews() {
+            loadingView.classList.add('hidden');
+            errorView.classList.add('hidden');
+            emptyView.classList.add('hidden');
+            fileListView.classList.add('hidden');
+            stats.classList.add('hidden');
+            fileTree.innerHTML = '';
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (!bytes) return null;
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+            return (bytes / 1073741824).toFixed(1) + ' GB';
+        }
+    </script>
+</body>
+</html>
