@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON文件读取器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+            border: 1px solid #ddd;
+        }
+        .error {
+            color: red;
+            background: #ffeaea;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON文件读取器</h1>
+    <button onclick="loadData()">加载data.json文件</button>
+    <div id="content"></div>
+
+    <script>
+        async function loadData() {
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                // 尝试读取同目录下的data.json文件
+                const response = await fetch('data.json');
+                
+                if (!response.ok) {
+                    throw new Error(`文件加载失败: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // 显示JSON内容
+                contentDiv.innerHTML = `
+                    <h2>data.json文件内容：</h2>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h2>错误</h2>
+                        <p>${error.message}</p>
+                        <p>请确保data.json文件与HTML文件在同一目录下</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 页面加载时自动尝试读取（可选）
+        // loadData();
+    </script>
+</body>
+</html>

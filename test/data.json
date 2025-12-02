@@ -1,0 +1,47 @@
+{
+   "AppDesc": {
+      "message": "You can easily split and separate tabs, split interface layout, and resize tabs by columns and rows. Multi-monitor support"
+   },
+   "AppName": {
+      "message": "Split Screen for Google Chrome"
+   },
+   "DistributeTabs": {
+      "message": "Paskirstykite skirtukus tarp naujų Windows"
+   },
+   "HelpText": {
+      "message": "Pasirinkite, kaip norite tvarkyti naršyklės langus"
+   },
+   "IdentifyScreens": {
+      "message": "Identifikuokite ekranus"
+   },
+   "MinimizeNote": {
+      "message": "\u003Cem>Pastaba:\u003C/em> jei turite daugiau langų nei nustatyta, langų viršijimas bus sumažintas."
+   },
+   "MoreInSettings": {
+      "message": "Norite daugiau sąrankos? Pridėkite daugiau nustatymuose."
+   },
+   "OneScreen": {
+      "message": "1 Ekranas"
+   },
+   "RateUs": {
+      "message": "Įvertinkite mus"
+   },
+   "ScreenMulti": {
+      "message": "{0} ekranai"
+   },
+   "ScreenPrimary": {
+      "message": "Pirminis"
+   },
+   "Settings": {
+      "message": "Nustatymai"
+   },
+   "SingleScreenCurrent": {
+      "message": "Naudokite ekrano dabartinį langą"
+   },
+   "SingleScreenPrimary": {
+      "message": "Naudokite pagrindinį ekraną (sukonfigūruotą jūsų OS)"
+   },
+   "SingleScreenSelect": {
+      "message": "1 ekrano sąrankai"
+   }
+}
