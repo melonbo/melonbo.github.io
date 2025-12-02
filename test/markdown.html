@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown in HTML</title>
+    <!-- 引入marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-content { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="markdown-container"></div>
+
+    <script>
+        // Markdown内容
+        const markdownText = `
+# 这是一个标题
+
+这是一个**Markdown**示例。
+
+## 功能列表
+- ✅ 支持标题
+- ✅ 支持**粗体**和*斜体*
+- ✅ 支持代码块：\`code\`
+- ✅ 支持列表
+
+\`\`\`javascript
+// 代码示例
+function hello() {
+    console.log("Hello Markdown!");
+}
+\`\`\`
+        `;
+
+        // 转换为HTML
+        document.getElementById('markdown-container').innerHTML = 
+            marked.parse(markdownText);
+    </script>
+</body>
+</html>
