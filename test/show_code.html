@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码与注释查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .code-column, .comment-column {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .code-column {
+            width: 50%;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            border-right: 1px solid #333;
+        }
+
+        .comment-column {
+            width: 50%;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .block {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .code-block {
+            background-color: #2d2d2d;
+            position: relative;
+        }
+
+        .comment-block {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .code-block h3 {
+            color: #61afef;
+        }
+
+        .comment-block h3 {
+            color: #2d3748;
+        }
+
+        .code-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .comment-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #4a5568;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 8px;
+            background: #61afef;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #4a98d4;
+        }
+
+        .active {
+            border: 2px solid #61afef;
+        }
+
+        .comment-block.active {
+            border-left: 4px solid #61afef;
+            background-color: #f0f8ff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .code-column, .comment-column {
+                width: 100%;
+                height: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="code-column" id="codeColumn"></div>
+        <div class="comment-column" id="commentColumn"></div>
+    </div>
+
+    <script>
+        // 获取当前HTML文件名（不含扩展名）
+        const htmlFileName = window.location.pathname.split('/').pop().replace('.html', '');
+        const jsonFilePath = `${htmlFileName}.json`;
+
+        // 加载JSON文件
+        fetch(jsonFilePath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`无法加载JSON文件: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderBlocks(data.blocks);
+                setupEventListeners();
+            })
+            .catch(error => {
+                console.error('加载失败:', error);
+                document.body.innerHTML = `<div style="padding: 20px; color: red;">错误: 无法加载 ${jsonFilePath} 文件</div>`;
+            });
+
+        // 渲染代码块和注释块
+        function renderBlocks(blocks) {
+            const codeColumn = document.getElementById('codeColumn');
+            const commentColumn = document.getElementById('commentColumn');
+
+            blocks.forEach((block, index) => {
+                const blockId = `block-${index}`;
+                
+                // 创建代码块
+                const codeBlock = document.createElement('div');
+                codeBlock.className = 'block code-block';
+                codeBlock.dataset.id = blockId;
+                codeBlock.innerHTML = `
+                    <h3>${block.title}</h3>
+                    <button class="copy-btn">复制代码</button>
+                    <div class="code-content">${escapeHtml(block.code)}</div>
+                `;
+                codeColumn.appendChild(codeBlock);
+
+                // 创建注释块
+                const commentBlock = document.createElement('div');
+                commentBlock.className = 'block comment-block';
+                commentBlock.dataset.id = blockId;
+                commentBlock.innerHTML = `
+                    <h3>${block.title}</h3>
+                    <div class="comment-content">${block.comment || ''}</div>
+                `;
+                commentColumn.appendChild(commentBlock);
+            });
+        }
+
+        // HTML转义函数，防止代码中的特殊字符被解析
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 复制代码功能
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const code = this.nextElementSibling.textContent;
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = '复制成功';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('复制失败:', err);
+                        this.textContent = '复制失败';
+                        setTimeout(() => {
+                            this.textContent = '复制代码';
+                        }, 1500);
+                    });
+                });
+            });
+
+            // 滚动同步和高亮功能
+            const codeColumn = document.getElementById('codeColumn');
+            const commentColumn = document.getElementById('commentColumn');
+
+            // 处理代码栏滚动
+            codeColumn.addEventListener('scroll', syncScroll);
+            
+            // 处理注释栏滚动
+            commentColumn.addEventListener('scroll', syncScroll);
+
+            function syncScroll(e) {
+                const isCodeScroll = e.target === codeColumn;
+                const sourceColumn = isCodeScroll ? codeColumn : commentColumn;
+                const targetColumn = isCodeScroll ? commentColumn : codeColumn;
+
+                // 找到当前可视区域内的活跃块
+                let activeBlock = null;
+                sourceColumn.querySelectorAll('.block').forEach(block => {
+                    const rect = block.getBoundingClientRect();
+                    // 当块的大部分在可视区域内时视为活跃块
+                    if (rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3) {
+                        activeBlock = block;
+                    }
+                });
+
+                // 更新高亮状态
+                document.querySelectorAll('.block').forEach(block => {
+                    block.classList.remove('active');
+                });
+
+                if (activeBlock) {
+                    // 高亮对应块
+                    activeBlock.classList.add('active');
+                    const targetBlock = targetColumn.querySelector(`.block[data-id="${activeBlock.dataset.id}"]`);
+                    if (targetBlock) {
+                        targetBlock.classList.add('active');
+                        
+                        // 同步滚动位置（只在源滚动时同步目标）
+                        if (!isNaN(targetBlock.offsetTop)) {
+                            targetColumn.scrollTop = targetBlock.offsetTop - 20; // 偏移20px留出顶部空间
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
