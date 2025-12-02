@@ -2,7 +2,7 @@
     "blocks": [
         {
             "title": "导入语句",
-            "code": "import re\nimport os\nimport sys\nimport html",
+            "code": "import re\nimport os\nimport sys\nimport htmlxxxxxxxxxxxx",
             "comment": "这里是对导入语句的注释说明..."
         },
         {
