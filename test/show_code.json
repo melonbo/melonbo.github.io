@@ -9,16 +9,6 @@
             "title": "函数定义：split_code_into_blocks",
             "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
             "comment": "这个函数用于按规则拆分代码为块..."
-        },
-        {
-            "title": "导入语句",
-            "code": "import re\nimport os\nimport sys\nimport html",
-            "comment": "这里是对导入语句的注释说明..."
-        },
-        {
-            "title": "函数定义：split_code_into_blocks",
-            "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
-            "comment": "这个函数用于按规则拆分代码为块..."
         }
     ]
 }
