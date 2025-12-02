@@ -3,52 +3,22 @@
         {
             "title": "导入语句",
             "code": "import re\nimport os\nimport sys\nimport html",
-            "comment": "这里是对导入语句的注释说明，包含正则、文件操作、系统功能和HTML处理相关依赖"
+            "comment": "这里是对导入语句的注释说明..."
         },
         {
             "title": "函数定义：split_code_into_blocks",
-            "code": "def split_code_into_blocks(file_path, lang='python'):\n    # 读取文件内容\n    with open(file_path, 'r', encoding='utf-8') as f:\n        content = f.read()\n    # 按语言特性拆分代码块\n    blocks = []\n    # 后续实现拆分逻辑\n    return blocks",
-            "comment": "这个函数用于按规则拆分代码为块，支持指定文件路径和编程语言，默认处理Python文件"
+            "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
+            "comment": "这个函数用于按规则拆分代码为块..."
         },
         {
-            "title": "函数定义：extract_code_titles",
-            "code": "def extract_code_titles(blocks):\n    titles = []\n    for block in blocks:\n        if 'title' in block:\n            titles.append(block['title'])\n    return titles",
-            "comment": "提取所有代码块的标题信息，返回标题列表，用于快速预览代码结构"
+            "title": "导入语句",
+            "code": "import re\nimport os\nimport sys\nimport html",
+            "comment": "这里是对导入语句的注释说明..."
         },
         {
-            "title": "函数定义：save_blocks_to_json",
-            "code": "def save_blocks_to_json(blocks, output_path):\n    import json\n    with open(output_path, 'w', encoding='utf-8') as f:\n        json.dump({'blocks': blocks}, f, ensure_ascii=False, indent=4)",
-            "comment": "将拆分后的代码块保存为JSON文件，保持格式化输出，支持中文正常显示"
-        },
-        {
-            "title": "函数定义：validate_code_block",
-            "code": "def validate_code_block(block):\n    required_fields = ['title', 'code']\n    for field in required_fields:\n        if field not in block:\n            return False, f'缺少必要字段：{field}'\n    return True, '代码块验证通过'",
-            "comment": "验证代码块结构的合法性，检查是否包含标题和代码等必要字段，返回验证结果"
-        },
-        {
-            "title": "函数定义：filter_blocks_by_keyword",
-            "code": "def filter_blocks_by_keyword(blocks, keyword):\n    filtered = []\n    for block in blocks:\n        if keyword.lower() in block['title'].lower() or keyword.lower() in block.get('comment', '').lower():\n            filtered.append(block)\n    return filtered",
-            "comment": "根据关键词筛选代码块，支持标题和注释中的模糊匹配，不区分大小写"
-        },
-        {
-            "title": "常量定义：支持的编程语言",
-            "code": "SUPPORTED_LANGUAGES = {\n    'python': '.py',\n    'javascript': '.js',\n    'java': '.java',\n    'c++': '.cpp',\n    'html': '.html',\n    'css': '.css'\n}",
-            "comment": "定义系统支持的编程语言及其对应的文件后缀名，用于文件类型识别和处理"
-        },
-        {
-            "title": "函数定义：get_file_extension",
-            "code": "def get_file_extension(file_path):\n    return os.path.splitext(file_path)[1].lower()",
-            "comment": "获取文件的后缀名（小写），用于判断文件对应的编程语言类型"
-        },
-        {
-            "title": "函数定义：merge_code_blocks",
-            "code": "def merge_code_blocks(blocks, separator='\\n\\n'):\n    merged_code = ''\n    for block in blocks:\n        merged_code += block['code'] + separator\n    return merged_code.rstrip(separator)",
-            "comment": "将多个代码块合并为完整代码字符串，使用指定分隔符分隔，去除末尾多余分隔符"
-        },
-        {
-            "title": "主函数：代码块处理入口",
-            "code": "def main():\n    if len(sys.argv) < 2:\n        print('用法：python code_processor.py <文件路径>')\n        sys.exit(1)\n    file_path = sys.argv[1]\n    blocks = split_code_into_blocks(file_path)\n    save_blocks_to_json(blocks, 'code_blocks.json')\n    print(f'成功拆分并保存 {len(blocks)} 个代码块')\n\nif __name__ == '__main__':\n    main()",
-            "comment": "程序主入口函数，接收命令行参数中的文件路径，执行代码拆分并保存结果，支持命令行调用"
+            "title": "函数定义：split_code_into_blocks",
+            "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
+            "comment": "这个函数用于按规则拆分代码为块..."
         }
     ]
 }
