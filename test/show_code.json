@@ -9,6 +9,11 @@
             "title": "函数定义：split_code_into_blocks",
             "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
             "comment": "这个函数用于按规则拆分代码为块..."
+        },
+        {
+            "title": "函数定义：split_code_into",
+            "code": "def split_code_into_blocks(file_path, lang='python'):\n    ...",
+            "comment": "这个函数用于按规则拆分代码为块..."
         }
     ]
 }
