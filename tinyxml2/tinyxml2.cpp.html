@@ -2399,7 +2399,9 @@ bool XMLPrinter::Visit( const XMLDeclaration&amp; declaration )
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'edited_code_notes.html';
+            const currentPath = window.location.pathname;
+            const fileName = currentPath.split(/[\/]/).pop();
+            a.download = fileName || 'edited_code_notes.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
