@@ -2462,8 +2462,11 @@ private:
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             const currentPath = window.location.pathname;
-            const fileName = currentPath.split(/[\/]/).pop();
-            a.download = fileName || 'edited_code_notes.html';
+            const originalFileName = currentPath.split(/[\/]/).pop();
+            const fileName = originalFileName 
+        		? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+        		: 'code_notes.html'; 
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
