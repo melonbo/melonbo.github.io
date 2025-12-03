@@ -2463,9 +2463,9 @@ private:
             a.href = URL.createObjectURL(blob);
             const currentPath = window.location.pathname;
             const originalFileName = currentPath.split(/[\/]/).pop();
-            console.log('Original file name:', originalFileName);
-            const fileName = (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`); 
-            console.log('Download file name:', fileName);
+            const fileName = originalFileName 
+        		? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+        		: 'code_notes.html'; 
             a.download = fileName;
             document.body.appendChild(a);
             a.click();
