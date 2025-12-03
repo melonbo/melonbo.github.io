@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .save-btn { background: transparent; border: none; color: transparent;}
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        .header { padding: 10px 20px; background: #333; color: 333; text-align: center; }
+        @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="save-btn" id="saveButton">save context</button>
+    </div>
+    <div class="page-container">
+<div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block1">
+            <div class="code-content" contenteditable="true">
+#include &quot;tinyxml2.h&quot;
+#include &lt;new&gt;		// yes, this one new style header, is in the Android SDK.
+
+            </div>
+        </div>
+        <div class="code-block" data-id="block2">
+            <div class="code-content" contenteditable="true">
+static inline int TIXML_SNPRINTF( char* buffer, size_t size, const char* format, ... )
+	{
+		va_list va;
+		va_start( va, format );
+		const int result = vsnprintf_s( buffer, size, _TRUNCATE, format, va );
+		va_end( va );
+		return result;
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block3">
+            <div class="code-content" contenteditable="true">
+static inline int TIXML_VSNPRINTF( char* buffer, size_t size, const char* format, va_list va )
+	{
+		const int result = vsnprintf_s( buffer, size, _TRUNCATE, format, va );
+		return result;
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block4">
+            <div class="code-content" contenteditable="true">
+static inline int TIXML_VSCPRINTF( const char* format, va_list va )
+		{
+			int len = 512;
+			for (;;) {
+				len = len*2;
+				char* str = new char[len]();
+				const int required = _vsnprintf(str, len, format, va);
+				delete[] str;
+				if ( required != -1 ) {
+					TIXMLASSERT( required &gt;= 0 );
+					len = required;
+					break;
+				}
+            </div>
+        </div>
+        <div class="code-block" data-id="block5">
+            <div class="code-content" contenteditable="true">
+static inline int TIXML_VSCPRINTF( const char* format, va_list va )
+	{
+		int len = vsnprintf( 0, 0, format, va );
+		TIXMLASSERT( len &gt;= 0 );
+		return len;
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block6">
+            <div class="code-content" contenteditable="true">
+Reset();
+}
+
+
+void StrPair::TransferTo( StrPair* other )
+{
+    if ( this == other ) {
+        return;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block7">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( other != 0 );
+    TIXMLASSERT( other-&gt;_flags == 0 );
+    TIXMLASSERT( other-&gt;_start == 0 );
+    TIXMLASSERT( other-&gt;_end == 0 );
+
+    other-&gt;Reset();
+
+    other-&gt;_flags = _flags;
+    other-&gt;_start = _start;
+    other-&gt;_end = _end;
+
+    _flags = 0;
+    _start = 0;
+    _end = 0;
+}
+
+
+void StrPair::Reset()
+{
+    if ( _flags &amp; NEEDS_DELETE ) {
+        delete [] _start;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block8">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( str );
+    Reset();
+    size_t len = strlen( str );
+    TIXMLASSERT( _start == 0 );
+    _start = new char[ len+1 ];
+    memcpy( _start, str, len+1 );
+    _end = _start + len;
+    _flags = flags | NEEDS_DELETE;
+}
+
+
+char* StrPair::ParseText( char* p, const char* endTag, int strFlags, int* curLineNumPtr )
+{
+    TIXMLASSERT( p );
+    TIXMLASSERT( endTag &amp;&amp; *endTag );
+	TIXMLASSERT(curLineNumPtr);
+
+    char* start = p;
+    const char  endChar = *endTag;
+    size_t length = strlen( endTag );
+
+    // Inner loop of text parsing.
+    while ( *p ) {
+        if ( *p == endChar &amp;&amp; strncmp( p, endTag, length ) == 0 ) {
+            Set( start, p, strFlags );
+            return p + length;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block9">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( p );
+    }
+    return 0;
+}
+
+
+char* StrPair::ParseName( char* p )
+{
+    if ( !p || !(*p) ) {
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block10">
+            <div class="code-content" contenteditable="true">
+Set( start, p, 0 );
+    return p;
+}
+
+
+void StrPair::CollapseWhitespace()
+{
+    // Adjusting _start would cause undefined behavior on delete[]
+    TIXMLASSERT( ( _flags &amp; NEEDS_DELETE ) == 0 );
+    // Trim leading space.
+    _start = XMLUtil::SkipWhiteSpace( _start, 0 );
+
+    if ( *_start ) {
+        const char* p = _start;	// the read pointer
+        char* q = _start;	// the write pointer
+
+        while( *p ) {
+            if ( XMLUtil::IsWhiteSpace( *p )) {
+                p = XMLUtil::SkipWhiteSpace( p, 0 );
+                if ( *p == 0 ) {
+                    break;    // don&#x27;t write to q; this trims the trailing space.
+                }
+            </div>
+        </div>
+        <div class="code-block" data-id="block11">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _start );
+    TIXMLASSERT( _end );
+    if ( _flags &amp; NEEDS_FLUSH ) {
+        *_end = 0;
+        _flags ^= NEEDS_FLUSH;
+
+        if ( _flags ) {
+            const char* p = _start;	// the read pointer
+            char* q = _start;	// the write pointer
+
+            while( p &lt; _end ) {
+                if ( (_flags &amp; NEEDS_NEWLINE_NORMALIZATION) &amp;&amp; *p == CR ) {
+                    // CR-LF pair becomes LF
+                    // CR alone becomes LF
+                    // LF-CR becomes LF
+                    if ( *(p+1) == LF ) {
+                        p += 2;
+                    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block12">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( 0 &lt;= len &amp;&amp; len &lt;= buflen );
+                            TIXMLASSERT( q + len &lt;= adjusted );
+                            p = adjusted;
+                            memcpy( q, buf, len );
+                            q += len;
+                        }
+                    }
+                    else {
+                        bool entityFound = false;
+                        for( int i = 0; i &lt; NUM_ENTITIES; ++i ) {
+                            const Entity&amp; entity = entities[i];
+                            if ( strncmp( p + 1, entity.pattern, entity.length ) == 0
+                                    &amp;&amp; *( p + entity.length + 1 ) == &#x27;;&#x27; ) {
+                                // Found an entity - convert.
+                                *q = entity.value;
+                                ++q;
+                                p += entity.length + 2;
+                                entityFound = true;
+                                break;
+                            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block13">
+            <div class="code-content" contenteditable="true">
+CollapseWhitespace();
+        }
+        _flags = (_flags &amp; NEEDS_DELETE);
+    }
+    TIXMLASSERT( _start );
+    return _start;
+}
+
+
+
+
+// --------- XMLUtil ----------- //
+
+const char* XMLUtil::writeBoolTrue  = &quot;true&quot;;
+const char* XMLUtil::writeBoolFalse = &quot;false&quot;;
+
+void XMLUtil::SetBoolSerialization(const char* writeTrue, const char* writeFalse)
+{
+	static const char* defTrue  = &quot;true&quot;;
+	static const char* defFalse = &quot;false&quot;;
+
+	writeBoolTrue = (writeTrue) ? writeTrue : defTrue;
+	writeBoolFalse = (writeFalse) ? writeFalse : defFalse;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block14">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( p );
+    TIXMLASSERT( bom );
+    *bom = false;
+    const unsigned char* pu = reinterpret_cast&lt;const unsigned char*&gt;(p);
+    // Check for BOM:
+    if (    *(pu+0) == TIXML_UTF_LEAD_0
+            &amp;&amp; *(pu+1) == TIXML_UTF_LEAD_1
+            &amp;&amp; *(pu+2) == TIXML_UTF_LEAD_2 ) {
+        *bom = true;
+        p += 3;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block15">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( p );
+    return p;
+}
+
+
+void XMLUtil::ConvertUTF32ToUTF8( unsigned long input, char* output, int* length )
+{
+    const unsigned long BYTE_MASK = 0xBF;
+    const unsigned long BYTE_MARK = 0x80;
+    const unsigned long FIRST_BYTE_MARK[7] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC }
+            </div>
+        </div>
+        <div class="code-block" data-id="block16">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( false );
+    }
+}
+
+
+const char* XMLUtil::GetCharacterRef(const char* p, char* value, int* length)
+{
+    // Assume an entity, and pull it out.
+    *length = 0;
+
+    static const uint32_t MAX_CODE_POINT = 0x10FFFF;
+
+    if (*(p + 1) == &#x27;#&#x27; &amp;&amp; *(p + 2)) {
+        uint32_t ucs = 0;
+        ptrdiff_t delta = 0;
+        uint32_t mult = 1;
+        static const char SEMICOLON = &#x27;;&#x27;;
+
+        bool hex = false;
+        uint32_t radix = 10;
+        const char* q = 0;
+        char terminator = &#x27;#&#x27;;
+
+        if (*(p + 2) == &#x27;x&#x27;) {
+            // Hexadecimal.
+            hex = true;
+            radix = 16;
+            terminator = &#x27;x&#x27;;
+
+            q = p + 3;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block17">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT(*q == SEMICOLON);
+
+        delta = q - p;
+        --q;
+
+        while (*q != terminator) {
+            uint32_t digit = 0;
+
+            if (*q &gt;= &#x27;0&#x27; &amp;&amp; *q &lt;= &#x27;9&#x27;) {
+                digit = *q - &#x27;0&#x27;;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block18">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT(digit &lt; radix);
+
+            const unsigned int digitScaled = mult * digit;
+            ucs += digitScaled;
+            mult *= radix;       
+            
+            // Security check: could a value exist that is out of range?
+            // Easily; limit to the MAX_CODE_POINT, which also allows for a
+            // bunch of leading zeroes.
+            if (mult &gt; MAX_CODE_POINT) {
+                mult = MAX_CODE_POINT;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block19">
+            <div class="code-content" contenteditable="true">
+ConvertUTF32ToUTF8(ucs, value, length);
+		if (length == 0) {
+            // If length is 0, there was an error. (Security? Bad input?)
+            // Fail safely.
+			return 0;
+		}
+            </div>
+        </div>
+        <div class="code-block" data-id="block20">
+            <div class="code-content" contenteditable="true">
+TIXML_SNPRINTF( buffer, bufferSize, &quot;%d&quot;, v );
+}
+
+
+void XMLUtil::ToStr( unsigned v, char* buffer, int bufferSize )
+{
+    TIXML_SNPRINTF( buffer, bufferSize, &quot;%u&quot;, v );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block21">
+            <div class="code-content" contenteditable="true">
+TIXML_SNPRINTF( buffer, bufferSize, &quot;%s&quot;, v ? writeBoolTrue : writeBoolFalse);
+}
+
+/*
+	ToStr() of a number is a very tricky topic.
+	https://github.com/leethomason/tinyxml2/issues/106
+*/
+void XMLUtil::ToStr( float v, char* buffer, int bufferSize )
+{
+    TIXML_SNPRINTF( buffer, bufferSize, &quot;%.8g&quot;, v );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block22">
+            <div class="code-content" contenteditable="true">
+TIXML_SNPRINTF( buffer, bufferSize, &quot;%.17g&quot;, v );
+}
+
+
+void XMLUtil::ToStr( int64_t v, char* buffer, int bufferSize )
+{
+	// horrible syntax trick to make the compiler happy about %lld
+	TIXML_SNPRINTF(buffer, bufferSize, &quot;%lld&quot;, static_cast&lt;long long&gt;(v));
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block23">
+            <div class="code-content" contenteditable="true">
+TIXML_SNPRINTF(buffer, bufferSize, &quot;%llu&quot;, static_cast&lt;unsigned long long&gt;(v));
+}
+
+bool XMLUtil::ToInt(const char* str, int* value)
+{
+    if (IsPrefixHex(str)) {
+        unsigned v;
+        if (TIXML_SSCANF(str, &quot;%x&quot;, &amp;v) == 1) {
+            *value = static_cast&lt;int&gt;(v);
+            return true;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block24">
+            <div class="code-content" contenteditable="true">
+if(TIXML_SSCANF(str, IsPrefixHex(str) ? &quot;%llx&quot; : &quot;%llu&quot;, &amp;v) == 1) {
+        *value = static_cast&lt;uint64_t&gt;(v);
+        return true;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block25">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( node );
+    TIXMLASSERT( p );
+    char* const start = p;
+    int const startLine = _parseCurLineNum;
+    p = XMLUtil::SkipWhiteSpace( p, &amp;_parseCurLineNum );
+    if( !*p ) {
+        *node = 0;
+        TIXMLASSERT( p );
+        return p;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block26">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( sizeof( XMLComment ) == sizeof( XMLUnknown ) );		// use same memory pool
+    TIXMLASSERT( sizeof( XMLComment ) == sizeof( XMLDeclaration ) );	// use same memory pool
+    XMLNode* returnNode = 0;
+    if ( XMLUtil::StringEqual( p, xmlHeader, xmlHeaderLen ) ) {
+        returnNode = CreateUnlinkedNode&lt;XMLDeclaration&gt;( _commentPool );
+        returnNode-&gt;_parseLineNum = _parseCurLineNum;
+        p += xmlHeaderLen;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block27">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( returnNode );
+    TIXMLASSERT( p );
+    *node = returnNode;
+    return p;
+}
+
+
+bool XMLDocument::Accept( XMLVisitor* visitor ) const
+{
+    TIXMLASSERT( visitor );
+    if ( visitor-&gt;VisitEnter( *this ) ) {
+        for ( const XMLNode* node=FirstChild(); node; node=node-&gt;NextSibling() ) {
+            if ( !node-&gt;Accept( visitor ) ) {
+                break;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block28">
+            <div class="code-content" contenteditable="true">
+_document( doc ),
+    _parent( 0 ),
+    _value(),
+    _parseLineNum( 0 ),
+    _firstChild( 0 ), _lastChild( 0 ),
+    _prev( 0 ), _next( 0 ),
+	_userData( 0 ),
+    _memPool( 0 )
+{
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block29">
+            <div class="code-content" contenteditable="true">
+DeleteChildren();
+    if ( _parent ) {
+        _parent-&gt;Unlink( this );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block30">
+            <div class="code-content" contenteditable="true">
+while( _firstChild ) {
+        TIXMLASSERT( _lastChild );
+        DeleteChild( _firstChild );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block31">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( child );
+    TIXMLASSERT( child-&gt;_document == _document );
+    TIXMLASSERT( child-&gt;_parent == this );
+    if ( child == _firstChild ) {
+        _firstChild = _firstChild-&gt;_next;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block32">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( node );
+    TIXMLASSERT( node-&gt;_document == _document );
+    TIXMLASSERT( node-&gt;_parent == this );
+    Unlink( node );
+	TIXMLASSERT(node-&gt;_prev == 0);
+	TIXMLASSERT(node-&gt;_next == 0);
+	TIXMLASSERT(node-&gt;_parent == 0);
+    DeleteNode( node );
+}
+
+
+XMLNode* XMLNode::InsertEndChild( XMLNode* addThis )
+{
+    TIXMLASSERT( addThis );
+    if ( addThis-&gt;_document != _document ) {
+        TIXMLASSERT( false );
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block33">
+            <div class="code-content" contenteditable="true">
+InsertChildPreamble( addThis );
+
+    if ( _lastChild ) {
+        TIXMLASSERT( _firstChild );
+        TIXMLASSERT( _lastChild-&gt;_next == 0 );
+        _lastChild-&gt;_next = addThis;
+        addThis-&gt;_prev = _lastChild;
+        _lastChild = addThis;
+
+        addThis-&gt;_next = 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block34">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _firstChild == 0 );
+        _firstChild = _lastChild = addThis;
+
+        addThis-&gt;_prev = 0;
+        addThis-&gt;_next = 0;
+    }
+    addThis-&gt;_parent = this;
+    return addThis;
+}
+
+
+XMLNode* XMLNode::InsertFirstChild( XMLNode* addThis )
+{
+    TIXMLASSERT( addThis );
+    if ( addThis-&gt;_document != _document ) {
+        TIXMLASSERT( false );
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block35">
+            <div class="code-content" contenteditable="true">
+InsertChildPreamble( addThis );
+
+    if ( _firstChild ) {
+        TIXMLASSERT( _lastChild );
+        TIXMLASSERT( _firstChild-&gt;_prev == 0 );
+
+        _firstChild-&gt;_prev = addThis;
+        addThis-&gt;_next = _firstChild;
+        _firstChild = addThis;
+
+        addThis-&gt;_prev = 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block36">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _lastChild == 0 );
+        _firstChild = _lastChild = addThis;
+
+        addThis-&gt;_prev = 0;
+        addThis-&gt;_next = 0;
+    }
+    addThis-&gt;_parent = this;
+    return addThis;
+}
+
+
+XMLNode* XMLNode::InsertAfterChild( XMLNode* afterThis, XMLNode* addThis )
+{
+    TIXMLASSERT( addThis );
+    if ( addThis-&gt;_document != _document ) {
+        TIXMLASSERT( false );
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block37">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( afterThis );
+
+    if ( afterThis-&gt;_parent != this ) {
+        TIXMLASSERT( false );
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block38">
+            <div class="code-content" contenteditable="true">
+return InsertEndChild( addThis );
+    }
+    InsertChildPreamble( addThis );
+    addThis-&gt;_prev = afterThis;
+    addThis-&gt;_next = afterThis-&gt;_next;
+    afterThis-&gt;_next-&gt;_prev = addThis;
+    afterThis-&gt;_next = addThis;
+    addThis-&gt;_parent = this;
+    return addThis;
+}
+
+
+
+
+const XMLElement* XMLNode::FirstChildElement( const char* name ) const
+{
+    for( const XMLNode* node = _firstChild; node; node = node-&gt;_next ) {
+        const XMLElement* element = node-&gt;ToElementWithName( name );
+        if ( element ) {
+            return element;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block39">
+            <div class="code-content" contenteditable="true">
+for( const XMLNode* node = _lastChild; node; node = node-&gt;_prev ) {
+        const XMLElement* element = node-&gt;ToElementWithName( name );
+        if ( element ) {
+            return element;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block40">
+            <div class="code-content" contenteditable="true">
+for( const XMLNode* node = _next; node; node = node-&gt;_next ) {
+        const XMLElement* element = node-&gt;ToElementWithName( name );
+        if ( element ) {
+            return element;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block41">
+            <div class="code-content" contenteditable="true">
+for( const XMLNode* node = _prev; node; node = node-&gt;_prev ) {
+        const XMLElement* element = node-&gt;ToElementWithName( name );
+        if ( element ) {
+            return element;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block42">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( p );
+        if ( node == 0 ) {
+            break;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block43">
+            <div class="code-content" contenteditable="true">
+FirstChild() &amp;&amp;
+                        FirstChild()-&gt;ToDeclaration() &amp;&amp;
+                        LastChild() &amp;&amp;
+                        LastChild()-&gt;ToDeclaration();
+                }
+                else {
+                    wellLocated = true;
+                }
+            </div>
+        </div>
+        <div class="code-block" data-id="block44">
+            <div class="code-content" contenteditable="true">
+DeleteNode( node );
+                return p;
+            }
+
+            // Handle an end tag returned to this level.
+            // And handle a bunch of annoying errors.
+            bool mismatch = false;
+            if ( endTag.Empty() ) {
+                if ( ele-&gt;ClosingType() == XMLElement::OPEN ) {
+                    mismatch = true;
+                }
+            </div>
+        </div>
+        <div class="code-block" data-id="block45">
+            <div class="code-content" contenteditable="true">
+InsertEndChild( node );
+    }
+    return 0;
+}
+
+/*static*/ void XMLNode::DeleteNode( XMLNode* node )
+{
+    if ( node == 0 ) {
+        return;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block46">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( insertThis );
+    TIXMLASSERT( insertThis-&gt;_document == _document );
+
+	if (insertThis-&gt;_parent) {
+        insertThis-&gt;_parent-&gt;Unlink( insertThis );
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block47">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( compare );
+    const XMLText* text = compare-&gt;ToText();
+    return ( text &amp;&amp; XMLUtil::StringEqual( text-&gt;Value(), Value() ) );
+}
+
+
+bool XMLText::Accept( XMLVisitor* visitor ) const
+{
+    TIXMLASSERT( visitor );
+    return visitor-&gt;Visit( *this );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block48">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( compare );
+    const XMLComment* comment = compare-&gt;ToComment();
+    return ( comment &amp;&amp; XMLUtil::StringEqual( comment-&gt;Value(), Value() ));
+}
+
+
+bool XMLComment::Accept( XMLVisitor* visitor ) const
+{
+    TIXMLASSERT( visitor );
+    return visitor-&gt;Visit( *this );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block49">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( compare );
+    const XMLDeclaration* declaration = compare-&gt;ToDeclaration();
+    return ( declaration &amp;&amp; XMLUtil::StringEqual( declaration-&gt;Value(), Value() ));
+}
+
+
+
+bool XMLDeclaration::Accept( XMLVisitor* visitor ) const
+{
+    TIXMLASSERT( visitor );
+    return visitor-&gt;Visit( *this );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block50">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( compare );
+    const XMLUnknown* unknown = compare-&gt;ToUnknown();
+    return ( unknown &amp;&amp; XMLUtil::StringEqual( unknown-&gt;Value(), Value() ));
+}
+
+
+bool XMLUnknown::Accept( XMLVisitor* visitor ) const
+{
+    TIXMLASSERT( visitor );
+    return visitor-&gt;Visit( *this );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block51">
+            <div class="code-content" contenteditable="true">
+if(XMLUtil::ToUnsigned64(Value(), value)) {
+        return XML_SUCCESS;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block52">
+            <div class="code-content" contenteditable="true">
+_closingType( OPEN ),
+    _rootAttribute( 0 )
+{
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block53">
+            <div class="code-content" contenteditable="true">
+while( _rootAttribute ) {
+        XMLAttribute* next = _rootAttribute-&gt;_next;
+        DeleteAttribute( _rootAttribute );
+        _rootAttribute = next;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block54">
+            <div class="code-content" contenteditable="true">
+for( XMLAttribute* a = _rootAttribute; a; a = a-&gt;_next ) {
+        if ( XMLUtil::StringEqual( a-&gt;Name(), name ) ) {
+            return a;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block55">
+            <div class="code-content" contenteditable="true">
+SetText( buf );
+}
+
+
+void XMLElement::SetText( unsigned v )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( v, buf, BUF_SIZE );
+    SetText( buf );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block56">
+            <div class="code-content" contenteditable="true">
+SetText(buf);
+}
+
+
+void XMLElement::SetText( bool v )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( v, buf, BUF_SIZE );
+    SetText( buf );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block57">
+            <div class="code-content" contenteditable="true">
+SetText( buf );
+}
+
+
+void XMLElement::SetText( double v )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( v, buf, BUF_SIZE );
+    SetText( buf );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block58">
+            <div class="code-content" contenteditable="true">
+if(FirstChild() &amp;&amp; FirstChild()-&gt;ToText()) {
+        const char* t = FirstChild()-&gt;Value();
+        if(XMLUtil::ToUnsigned64(t, uval)) {
+            return XML_SUCCESS;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block59">
+            <div class="code-content" contenteditable="true">
+for( attrib = _rootAttribute;
+            attrib;
+            last = attrib, attrib = attrib-&gt;_next ) {
+        if ( XMLUtil::StringEqual( attrib-&gt;Name(), name ) ) {
+            break;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block60">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( attrib );
+        if ( last ) {
+            TIXMLASSERT( last-&gt;_next == 0 );
+            last-&gt;_next = attrib;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block61">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _rootAttribute == 0 );
+            _rootAttribute = attrib;
+        }
+        attrib-&gt;SetName( name );
+    }
+    return attrib;
+}
+
+
+void XMLElement::DeleteAttribute( const char* name )
+{
+    XMLAttribute* prev = 0;
+    for( XMLAttribute* a=_rootAttribute; a; a=a-&gt;_next ) {
+        if ( XMLUtil::StringEqual( name, a-&gt;Name() ) ) {
+            if ( prev ) {
+                prev-&gt;_next = a-&gt;_next;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block62">
+            <div class="code-content" contenteditable="true">
+DeleteAttribute( a );
+            break;
+        }
+        prev = a;
+    }
+}
+
+
+char* XMLElement::ParseAttributes( char* p, int* curLineNumPtr )
+{
+    XMLAttribute* prevAttribute = 0;
+
+    // Read the attributes.
+    while( p ) {
+        p = XMLUtil::SkipWhiteSpace( p, curLineNumPtr );
+        if ( !(*p) ) {
+            _document-&gt;SetError( XML_ERROR_PARSING_ELEMENT, _parseLineNum, &quot;XMLElement name=%s&quot;, Name() );
+            return 0;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block63">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( attrib );
+            attrib-&gt;_parseLineNum = _document-&gt;_parseCurLineNum;
+
+            const int attrLineNum = attrib-&gt;_parseLineNum;
+
+            p = attrib-&gt;ParseDeep( p, _document-&gt;ProcessEntities(), curLineNumPtr );
+            if ( !p || Attribute( attrib-&gt;Name() ) ) {
+                DeleteAttribute( attrib );
+                _document-&gt;SetError( XML_ERROR_PARSING_ATTRIBUTE, attrLineNum, &quot;XMLElement name=%s&quot;, Name() );
+                return 0;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block64">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( prevAttribute-&gt;_next == 0 );
+                prevAttribute-&gt;_next = attrib;
+            }
+            else {
+                TIXMLASSERT( _rootAttribute == 0 );
+                _rootAttribute = attrib;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block65">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( sizeof( XMLAttribute ) == _document-&gt;_attributePool.ItemSize() );
+    XMLAttribute* attrib = new (_document-&gt;_attributePool.Alloc() ) XMLAttribute();
+    TIXMLASSERT( attrib );
+    attrib-&gt;_memPool = &amp;_document-&gt;_attributePool;
+    attrib-&gt;_memPool-&gt;SetTracked();
+    return attrib;
+}
+
+
+XMLElement* XMLElement::InsertNewChildElement(const char* name)
+{
+    XMLElement* node = _document-&gt;NewElement(name);
+    return InsertEndChild(node) ? node : 0;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block66">
+            <div class="code-content" contenteditable="true">
+return InsertEndChild(node) ? node : 0;
+}
+
+XMLText* XMLElement::InsertNewText(const char* text)
+{
+    XMLText* node = _document-&gt;NewText(text);
+    return InsertEndChild(node) ? node : 0;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block67">
+            <div class="code-content" contenteditable="true">
+return InsertEndChild(node) ? node : 0;
+}
+
+XMLUnknown* XMLElement::InsertNewUnknown(const char* text)
+{
+    XMLUnknown* node = _document-&gt;NewUnknown(text);
+    return InsertEndChild(node) ? node : 0;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block68">
+            <div class="code-content" contenteditable="true">
+for( const XMLAttribute* a=FirstAttribute(); a; a=a-&gt;Next() ) {
+        element-&gt;SetAttribute( a-&gt;Name(), a-&gt;Value() );					// fixme: this will always allocate memory. Intern?
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block69">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( compare );
+    const XMLElement* other = compare-&gt;ToElement();
+    if ( other &amp;&amp; XMLUtil::StringEqual( other-&gt;Name(), Name() )) {
+
+        const XMLAttribute* a=FirstAttribute();
+        const XMLAttribute* b=other-&gt;FirstAttribute();
+
+        while ( a &amp;&amp; b ) {
+            if ( !XMLUtil::StringEqual( a-&gt;Value(), b-&gt;Value() ) ) {
+                return false;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block70">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( visitor );
+    if ( visitor-&gt;VisitEnter( *this, _rootAttribute ) ) {
+        for ( const XMLNode* node=FirstChild(); node; node=node-&gt;NextSibling() ) {
+            if ( !node-&gt;Accept( visitor ) ) {
+                break;
+            }
+            </div>
+        </div>
+        <div class="code-block" data-id="block71">
+            <div class="code-content" contenteditable="true">
+XMLNode( 0 ),
+    _writeBOM( false ),
+    _processEntities( processEntities ),
+    _errorID(XML_SUCCESS),
+    _whitespaceMode( whitespaceMode ),
+    _errorStr(),
+    _errorLineNum( 0 ),
+    _charBuffer( 0 ),
+    _parseCurLineNum( 0 ),
+	_parsingDepth(0),
+    _unlinked(),
+    _elementPool(),
+    _attributePool(),
+    _textPool(),
+    _commentPool()
+{
+    // avoid VC++ C4355 warning about &#x27;this&#x27; in initializer list (C4355 is off by default in VS2012+)
+    _document = this;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block72">
+            <div class="code-content" contenteditable="true">
+Clear();
+}
+
+
+void XMLDocument::MarkInUse(const XMLNode* const node)
+{
+	TIXMLASSERT(node);
+	TIXMLASSERT(node-&gt;_parent == 0);
+
+	for (size_t i = 0; i &lt; _unlinked.Size(); ++i) {
+		if (node == _unlinked[i]) {
+			_unlinked.SwapRemove(i);
+			break;
+		}
+            </div>
+        </div>
+        <div class="code-block" data-id="block73">
+            <div class="code-content" contenteditable="true">
+DeleteChildren();
+	while( _unlinked.Size()) {
+		DeleteNode(_unlinked[0]);	// Will remove from _unlinked as part of delete.
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block74">
+            <div class="code-content" contenteditable="true">
+ClearError();
+
+    delete [] _charBuffer;
+    _charBuffer = 0;
+	_parsingDepth = 0;
+
+#if 0
+    _textPool.Trace( &quot;text&quot; );
+    _elementPool.Trace( &quot;element&quot; );
+    _commentPool.Trace( &quot;comment&quot; );
+    _attributePool.Trace( &quot;attribute&quot; );
+#endif
+
+#ifdef TINYXML2_DEBUG
+    if ( !hadError ) {
+        TIXMLASSERT( _elementPool.CurrentAllocs()   == _elementPool.Untracked() );
+        TIXMLASSERT( _attributePool.CurrentAllocs() == _attributePool.Untracked() );
+        TIXMLASSERT( _textPool.CurrentAllocs()      == _textPool.Untracked() );
+        TIXMLASSERT( _commentPool.CurrentAllocs()   == _commentPool.Untracked() );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block75">
+            <div class="code-content" contenteditable="true">
+static FILE* callfopen( const char* filepath, const char* mode )
+{
+    TIXMLASSERT( filepath );
+    TIXMLASSERT( mode );
+#if defined(_MSC_VER) &amp;&amp; (_MSC_VER &gt;= 1400 ) &amp;&amp; (!defined WINCE)
+    FILE* fp = 0;
+    const errno_t err = fopen_s( &amp;fp, filepath, mode );
+    if ( err ) {
+        return 0;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block76">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( node );
+    TIXMLASSERT(node-&gt;_document == this );
+    if (node-&gt;_parent) {
+        node-&gt;_parent-&gt;DeleteChild( node );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block77">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( false );
+        SetError( XML_ERROR_FILE_COULD_NOT_BE_OPENED, 0, &quot;filename=&lt;null&gt;&quot; );
+        return _errorID;
+    }
+
+    Clear();
+    FILE* fp = callfopen( filename, &quot;rb&quot; );
+    if ( !fp ) {
+        SetError( XML_ERROR_FILE_NOT_FOUND, 0, &quot;filename=%s&quot;, filename );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block78">
+            <div class="code-content" contenteditable="true">
+LoadFile( fp );
+    fclose( fp );
+    return _errorID;
+}
+
+XMLError XMLDocument::LoadFile( FILE* fp )
+{
+    Clear();
+
+    TIXML_FSEEK( fp, 0, SEEK_SET );
+    if ( fgetc( fp ) == EOF &amp;&amp; ferror( fp ) != 0 ) {
+        SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block79">
+            <div class="code-content" contenteditable="true">
+TIXML_FSEEK( fp, 0, SEEK_END );
+
+    unsigned long long filelength;
+    {
+        const long long fileLengthSigned = TIXML_FTELL( fp );
+        TIXML_FSEEK( fp, 0, SEEK_SET );
+        if ( fileLengthSigned == -1L ) {
+            SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+            return _errorID;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block80">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( fileLengthSigned &gt;= 0 );
+        filelength = static_cast&lt;unsigned long long&gt;(fileLengthSigned);
+    }
+
+    const size_t maxSizeT = static_cast&lt;size_t&gt;(-1);
+    // We&#x27;ll do the comparison as an unsigned long long, because that&#x27;s guaranteed to be at
+    // least 8 bytes, even on a 32-bit platform.
+    if ( filelength &gt;= static_cast&lt;unsigned long long&gt;(maxSizeT) ) {
+        // Cannot handle files which won&#x27;t fit in buffer together with null terminator
+        SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block81">
+            <div class="code-content" contenteditable="true">
+SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
+        return _errorID;
+    }
+
+    const size_t size = static_cast&lt;size_t&gt;(filelength);
+    TIXMLASSERT( _charBuffer == 0 );
+    _charBuffer = new char[size+1];
+    const size_t read = fread( _charBuffer, 1, size, fp );
+    if ( read != size ) {
+        SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block82">
+            <div class="code-content" contenteditable="true">
+Parse();
+    return _errorID;
+}
+
+
+XMLError XMLDocument::SaveFile( const char* filename, bool compact )
+{
+    if ( !filename ) {
+        TIXMLASSERT( false );
+        SetError( XML_ERROR_FILE_COULD_NOT_BE_OPENED, 0, &quot;filename=&lt;null&gt;&quot; );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block83">
+            <div class="code-content" contenteditable="true">
+SetError( XML_ERROR_FILE_COULD_NOT_BE_OPENED, 0, &quot;filename=%s&quot;, filename );
+        return _errorID;
+    }
+    SaveFile(fp, compact);
+    fclose( fp );
+    return _errorID;
+}
+
+
+XMLError XMLDocument::SaveFile( FILE* fp, bool compact )
+{
+    // Clear any error from the last save, otherwise it will get reported
+    // for *this* call.
+    ClearError();
+    XMLPrinter stream( fp, compact );
+    Print( &amp;stream );
+    return _errorID;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block84">
+            <div class="code-content" contenteditable="true">
+Clear();
+
+    if ( nBytes == 0 || !xml || !*xml ) {
+        SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
+        return _errorID;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block85">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _charBuffer == 0 );
+    _charBuffer = new char[ nBytes+1 ];
+    memcpy( _charBuffer, xml, nBytes );
+    _charBuffer[nBytes] = 0;
+
+    Parse();
+    if ( Error() ) {
+        // clean up now essentially dangling memory.
+        // and the parse fail can put objects in the
+        // pools that are dead and inaccessible.
+        DeleteChildren();
+        _elementPool.Clear();
+        _attributePool.Clear();
+        _textPool.Clear();
+        _commentPool.Clear();
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block86">
+            <div class="code-content" contenteditable="true">
+Accept( streamer );
+    }
+    else {
+        XMLPrinter stdoutStreamer( stdout );
+        Accept( &amp;stdoutStreamer );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block87">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT(error &gt;= 0 &amp;&amp; error &lt; XML_ERROR_COUNT);
+    _errorID = error;
+    _errorLineNum = lineNum;
+	_errorStr.Reset();
+
+    const size_t BUFFER_SIZE = 1000;
+    char* buffer = new char[BUFFER_SIZE];
+
+    TIXMLASSERT(sizeof(error) &lt;= sizeof(int));
+    TIXML_SNPRINTF(buffer, BUFFER_SIZE, &quot;Error=%s ErrorID=%d (0x%x) Line number=%d&quot;,
+        ErrorIDToName(error), static_cast&lt;int&gt;(error), static_cast&lt;unsigned int&gt;(error), lineNum);
+
+	if (format) {
+		size_t len = strlen(buffer);
+		TIXML_SNPRINTF(buffer + len, BUFFER_SIZE - len, &quot;: &quot;);
+		len = strlen(buffer);
+
+		va_list va;
+		va_start(va, format);
+		TIXML_VSNPRINTF(buffer + len, BUFFER_SIZE - len, format, va);
+		va_end(va);
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block88">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( errorName &amp;&amp; errorName[0] );
+    return errorName;
+}
+
+const char* XMLDocument::ErrorStr() const
+{
+	return _errorStr.Empty() ? &quot;&quot; : _errorStr.GetStr();
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block89">
+            <div class="code-content" contenteditable="true">
+printf(&quot;%s\n&quot;, ErrorStr());
+}
+
+const char* XMLDocument::ErrorName() const
+{
+    return ErrorIDToName(_errorID);
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block90">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( NoChildren() ); // Clear() must have been called previously
+    TIXMLASSERT( _charBuffer );
+    _parseCurLineNum = 1;
+    _parseLineNum = 1;
+    char* p = _charBuffer;
+    p = XMLUtil::SkipWhiteSpace( p, &amp;_parseCurLineNum );
+    p = const_cast&lt;char*&gt;( XMLUtil::ReadBOM( p, &amp;_writeBOM ) );
+    if ( !*p ) {
+        SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
+        return;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block91">
+            <div class="code-content" contenteditable="true">
+ParseDeep(p, 0, &amp;_parseCurLineNum );
+}
+
+void XMLDocument::PushDepth()
+{
+	_parsingDepth++;
+	if (_parsingDepth == TINYXML2_MAX_ELEMENT_DEPTH) {
+		SetError(XML_ELEMENT_DEPTH_EXCEEDED, _parseCurLineNum, &quot;Element nesting is too deep.&quot; );
+	}
+            </div>
+        </div>
+        <div class="code-block" data-id="block92">
+            <div class="code-content" contenteditable="true">
+_elementJustOpened( false ),
+    _stack(),
+    _firstElement( true ),
+    _fp( file ),
+    _depth( depth ),
+    _textDepth( -1 ),
+    _processEntities( true ),
+    _compactMode( compact ),
+    _buffer()
+{
+    for( int i=0; i&lt;ENTITY_RANGE; ++i ) {
+        _entityFlag[i] = false;
+        _restrictedEntityFlag[i] = false;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block93">
+            <div class="code-content" contenteditable="true">
+for( int i=0; i&lt;NUM_ENTITIES; ++i ) {
+        const char entityValue = entities[i].value;
+        if ((aposInAttributes == ESCAPE_APOS_CHARS_IN_ATTRIBUTES) || (entityValue != SINGLE_QUOTE)) {
+            const unsigned char flagIndex = static_cast&lt;unsigned char&gt;(entityValue);
+            TIXMLASSERT( flagIndex &lt; ENTITY_RANGE );
+            _entityFlag[flagIndex] = true;
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block94">
+            <div class="code-content" contenteditable="true">
+va_start( va, format );
+
+    if ( _fp ) {
+        vfprintf( _fp, format, va );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block95">
+            <div class="code-content" contenteditable="true">
+va_end( va );
+        TIXMLASSERT( len &gt;= 0 );
+        va_start( va, format );
+        TIXMLASSERT( _buffer.Size() &gt; 0 &amp;&amp; _buffer[_buffer.Size() - 1] == 0 );
+        char* p = _buffer.PushArr( len ) - 1;	// back up over the null terminator.
+		TIXML_VSNPRINTF( p, len+1, format, va );
+    }
+    va_end( va );
+}
+
+
+void XMLPrinter::Write( const char* data, size_t size )
+{
+    if ( _fp ) {
+        fwrite ( data , sizeof(char), size, _fp);
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block96">
+            <div class="code-content" contenteditable="true">
+memcpy( p, data, size );
+        p[size] = 0;
+    }
+}
+
+
+void XMLPrinter::Putc( char ch )
+{
+    if ( _fp ) {
+        fputc ( ch, _fp);
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block97">
+            <div class="code-content" contenteditable="true">
+for( int i=0; i&lt;depth; ++i ) {
+        Write( &quot;    &quot; );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block98">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( p &lt;= q );
+            // Remember, char is sometimes signed. (How many times has that bitten me?)
+            if ( *q &gt; 0 &amp;&amp; *q &lt; ENTITY_RANGE ) {
+                // Check for entities. If one is found, flush
+                // the stream up until the entity, write the
+                // entity, and keep looking.
+                if ( flag[static_cast&lt;unsigned char&gt;(*q)] ) {
+                    while ( p &lt; q ) {
+                        const size_t delta = q - p;
+                        const int toPrint = ( INT_MAX &lt; delta ) ? INT_MAX : static_cast&lt;int&gt;(delta);
+                        Write( p, toPrint );
+                        p += toPrint;
+                    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block99">
+            <div class="code-content" contenteditable="true">
+for( int i=0; i&lt;NUM_ENTITIES; ++i ) {
+                        if ( entities[i].value == *q ) {
+                            Putc( &#x27;&amp;&#x27; );
+                            Write( entities[i].pattern, entities[i].length );
+                            Putc( &#x27;;&#x27; );
+                            entityPatternPrinted = true;
+                            break;
+                        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block100">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( false );
+                    }
+                    ++p;
+                }
+            }
+            ++q;
+            TIXMLASSERT( p &lt;= q );
+        }
+        // Flush the remaining string. This will be the entire
+        // string if an entity wasn&#x27;t found.
+        if ( p &lt; q ) {
+            const size_t delta = q - p;
+            const int toPrint = ( INT_MAX &lt; delta ) ? INT_MAX : static_cast&lt;int&gt;(delta);
+            Write( p, toPrint );
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block101">
+            <div class="code-content" contenteditable="true">
+Write( p );
+    }
+}
+
+
+void XMLPrinter::PushHeader( bool writeBOM, bool writeDec )
+{
+    if ( writeBOM ) {
+        static const unsigned char bom[] = { TIXML_UTF_LEAD_0, TIXML_UTF_LEAD_1, TIXML_UTF_LEAD_2, 0 }
+            </div>
+        </div>
+        <div class="code-block" data-id="block102">
+            <div class="code-content" contenteditable="true">
+Write( reinterpret_cast&lt; const char* &gt;( bom ) );
+    }
+    if ( writeDec ) {
+        PushDeclaration( &quot;xml version=\&quot;1.0\&quot;&quot; );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block103">
+            <div class="code-content" contenteditable="true">
+SealElementIfJustOpened();
+
+    if ( compactMode ) {
+        return;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block104">
+            <div class="code-content" contenteditable="true">
+Putc( &#x27;\n&#x27; );
+        PrintSpace( _depth );
+    }
+
+    _firstElement = false;
+}
+
+void XMLPrinter::OpenElement( const char* name, bool compactMode )
+{
+    PrepareForNewNode( compactMode );
+    _stack.Push( name );
+
+    Write ( &quot;&lt;&quot; );
+    Write ( name );
+
+    _elementJustOpened = true;
+    ++_depth;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block105">
+            <div class="code-content" contenteditable="true">
+TIXMLASSERT( _elementJustOpened );
+    Putc ( &#x27; &#x27; );
+    Write( name );
+    Write( &quot;=\&quot;&quot; );
+    PrintString( value, false );
+    Putc ( &#x27;\&quot;&#x27; );
+}
+
+
+void XMLPrinter::PushAttribute( const char* name, int v )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( v, buf, BUF_SIZE );
+    PushAttribute( name, buf );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block106">
+            <div class="code-content" contenteditable="true">
+PushAttribute( name, buf );
+}
+
+
+void XMLPrinter::PushAttribute(const char* name, int64_t v)
+{
+	char buf[BUF_SIZE];
+	XMLUtil::ToStr(v, buf, BUF_SIZE);
+	PushAttribute(name, buf);
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block107">
+            <div class="code-content" contenteditable="true">
+PushAttribute( name, buf );
+}
+
+
+void XMLPrinter::PushAttribute( const char* name, double v )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( v, buf, BUF_SIZE );
+    PushAttribute( name, buf );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block108">
+            <div class="code-content" contenteditable="true">
+Write( &quot;/&gt;&quot; );
+    }
+    else {
+        if ( _textDepth &lt; 0 &amp;&amp; !compactMode) {
+            Putc( &#x27;\n&#x27; );
+            PrintSpace( _depth );
+        }
+            </div>
+        </div>
+        <div class="code-block" data-id="block109">
+            <div class="code-content" contenteditable="true">
+Putc( &#x27;\n&#x27; );
+    }
+    _elementJustOpened = false;
+}
+
+
+void XMLPrinter::SealElementIfJustOpened()
+{
+    if ( !_elementJustOpened ) {
+        return;
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block110">
+            <div class="code-content" contenteditable="true">
+Putc( &#x27;&gt;&#x27; );
+}
+
+
+void XMLPrinter::PushText( const char* text, bool cdata )
+{
+    _textDepth = _depth-1;
+
+    SealElementIfJustOpened();
+    if ( cdata ) {
+        Write( &quot;&lt;![CDATA[&quot; );
+        Write( text );
+        Write( &quot;]]&gt;&quot; );
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block111">
+            <div class="code-content" contenteditable="true">
+PrintString( text, true );
+    }
+}
+
+
+void XMLPrinter::PushText( int64_t value )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( value, buf, BUF_SIZE );
+    PushText( buf, false );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block112">
+            <div class="code-content" contenteditable="true">
+PushText( buf, false );
+}
+
+
+void XMLPrinter::PushText( unsigned value )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( value, buf, BUF_SIZE );
+    PushText( buf, false );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block113">
+            <div class="code-content" contenteditable="true">
+PushText( buf, false );
+}
+
+
+void XMLPrinter::PushText( float value )
+{
+    char buf[BUF_SIZE];
+    XMLUtil::ToStr( value, buf, BUF_SIZE );
+    PushText( buf, false );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block114">
+            <div class="code-content" contenteditable="true">
+PushText( buf, false );
+}
+
+
+void XMLPrinter::PushComment( const char* comment )
+{
+    PrepareForNewNode( _compactMode );
+
+    Write( &quot;&lt;!--&quot; );
+    Write( comment );
+    Write( &quot;--&gt;&quot; );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block115">
+            <div class="code-content" contenteditable="true">
+PrepareForNewNode( _compactMode );
+
+    Write( &quot;&lt;?&quot; );
+    Write( value );
+    Write( &quot;?&gt;&quot; );
+}
+
+
+void XMLPrinter::PushUnknown( const char* value )
+{
+    PrepareForNewNode( _compactMode );
+
+    Write( &quot;&lt;!&quot; );
+    Write( value );
+    Putc( &#x27;&gt;&#x27; );
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block116">
+            <div class="code-content" contenteditable="true">
+PushHeader( true, false );
+    }
+    return true;
+}
+
+
+bool XMLPrinter::VisitEnter( const XMLElement&amp; element, const XMLAttribute* attribute )
+{
+    const XMLElement* parentElem = 0;
+    if ( element.Parent() ) {
+        parentElem = element.Parent()-&gt;ToElement();
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block117">
+            <div class="code-content" contenteditable="true">
+OpenElement( element.Name(), compactMode );
+    while ( attribute ) {
+        PushAttribute( attribute-&gt;Name(), attribute-&gt;Value() );
+        attribute = attribute-&gt;Next();
+    }
+            </div>
+        </div>
+        <div class="code-block" data-id="block118">
+            <div class="code-content" contenteditable="true">
+CloseElement( CompactMode(element) );
+    return true;
+}
+
+
+bool XMLPrinter::Visit( const XMLText&amp; text )
+{
+    PushText( text.Value(), text.CData() );
+    return true;
+}
+            </div>
+        </div>
+        <div class="code-block" data-id="block119">
+            <div class="code-content" contenteditable="true">
+PushComment( comment.Value() );
+    return true;
+}
+
+bool XMLPrinter::Visit( const XMLDeclaration&amp; declaration )
+{
+    PushDeclaration( declaration.Value() );
+    return true;
+}
+            </div>
+        </div>
+    </div>
+<div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block1">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block2">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block3">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block4">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block5">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block6">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block7">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block8">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block9">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block10">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block11">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block12">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block13">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block14">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block15">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block16">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block17">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block18">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block19">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block20">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block21">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block22">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block23">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block24">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block25">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block26">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block27">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block28">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block29">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block30">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block31">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block32">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block33">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block34">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block35">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block36">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block37">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block38">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block39">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block40">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block41">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block42">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block43">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block44">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block45">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block46">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block47">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block48">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block49">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block50">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block51">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block52">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block53">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block54">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block55">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block56">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block57">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block58">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block59">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block60">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block61">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block62">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block63">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block64">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block65">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block66">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block67">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block68">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block69">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block70">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block71">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block72">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block73">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block74">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block75">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block76">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block77">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block78">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block79">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block80">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block81">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block82">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block83">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block84">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block85">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block86">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block87">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block88">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block89">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block90">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block91">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block92">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block93">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block94">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block95">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block96">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block97">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block98">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block99">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block100">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block101">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block102">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block103">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block104">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block105">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block106">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block107">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block108">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block109">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block110">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block111">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block112">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block113">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block114">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block115">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block116">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block117">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block118">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+        <div class="explain-block" data-id="block119">
+            <div class="explain-content" contenteditable="true">
+        
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        const codeColumn = document.getElementById('codeColumn');
+        codeColumn.addEventListener('scroll', () => {
+            let active = null;
+            document.querySelectorAll('.code-block').forEach(block => {
+                const rect = block.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) active = block;
+            });
+            document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+            if (active) {
+                active.classList.add('active');
+                document.querySelector(`.explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'edited_code_notes.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            
+            this.textContent = 'save success';
+            setTimeout(() => this.textContent = 'save context', 1500);
+        });
+    </script>
+</body>
+</html>
