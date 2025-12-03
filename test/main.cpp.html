@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <style>
+        /* 复用之前的CSS样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .copy-btn { position: absolute; top: 15px; right: 15px; padding: 4px 8px; background: #61afef; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+<div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block1">
+            <div class="code-content">
+#include &quot;gui/maingui.h&quot;
+#include &lt;QApplication&gt;
+#include &lt;QTextCodec&gt;
+#include &lt;QFontDatabase&gt;
+#include &lt;QString&gt;
+#include &quot;config/util.h&quot;
+#include &quot;log/Log4c.h&quot;
+#include &lt;QtUiTools/QUiLoader&gt;
+#include &lt;QFile&gt;
+#include &lt;config/platform.h&gt;
+#include &lt;QDialog&gt;
+#include &lt;QDebug&gt;
+#include &quot;log/Log4c.h&quot;
+
+            </div>
+        </div>
+        <div class="code-block" data-id="block2">
+            <div class="code-content">
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    QApplication::setOverrideCursor(Qt::BlankCursor);
+    CPLATFORM platform;
+    platform.init();
+    &lt;xxx&gt;;
+
+    //设置UTF8转换
+    QTextCodec *codec = QTextCodec::codecForName(&quot;UTF-8&quot;);
+    QTextCodec::setCodecForLocale(codec);
+
+    //设置字体
+    QFont font(&quot;simhei&quot;);
+    a.setFont(font);
+
+    QFile style(&quot;/home/root/app/ui.css&quot;);
+    style.open(QFile::ReadOnly);
+    platform.ui_css = QLatin1String(style.readAll());
+    style.close();
+    a.setStyleSheet(platform.ui_css);
+
+    MainGui *pMainGui;
+    pMainGui = new MainGui();
+    pMainGui-&gt;show();
+
+    return a.exec();
+}
+            </div>
+        </div>
+    </div>
+<div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block1" contenteditable="true">
+        插入
+    </div>
+    </div>
+    </div>
+    <script>
+        // 复制功能
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const code = this.nextElementSibling.nextElementSibling.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '复制成功';
+                    setTimeout(() => this.textContent = orig, 1500);
+                });
+            });
+        });
+
+        // 滚动同步
+        const codeColumn = document.getElementById('codeColumn');
+        codeColumn.addEventListener('scroll', () => {
+            let active = null;
+            document.querySelectorAll('.code-block').forEach(block => {
+                const rect = block.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) active = block;
+            });
+            document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+            if (active) {
+                active.classList.add('active');
+                document.querySelector(`.explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

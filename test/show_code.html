@@ -214,10 +214,10 @@
             const commentColumn = document.getElementById('commentColumn');
 
             // 处理代码栏滚动
-            codeColumn.addEventListener('scroll', syncScroll);
+            //codeColumn.addEventListener('scroll', syncScroll);
             
             // 处理注释栏滚动
-            commentColumn.addEventListener('scroll', syncScroll);
+            //commentColumn.addEventListener('scroll', syncScroll);
 
             function syncScroll(e) {
                 const isCodeScroll = e.target === codeColumn;
@@ -229,7 +229,8 @@
                 sourceColumn.querySelectorAll('.block').forEach(block => {
                     const rect = block.getBoundingClientRect();
                     // 当块的大部分在可视区域内时视为活跃块
-                    if (rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3) {
+                    if (rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5) {
+                    //if (rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2) {
                         activeBlock = block;
                     }
                 });
