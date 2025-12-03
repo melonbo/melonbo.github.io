@@ -228,6 +228,110 @@
   cursor: pointer !important;
   transition: opacity 0.5s ease !important;
 }
+</style><style type="text/css">#_copy{align-items:center;background:#4494d5;border-radius:3px;color:#fff;cursor:pointer;display:flex;font-size:13px;height:30px;justify-content:center;position:absolute;width:60px;z-index:1000}#select-tooltip,#sfModal,.modal-backdrop,div[id^=reader-helper]{display:none!important}.modal-open{overflow:auto!important}._sf_adjust_body{padding-right:0!important}.enable_copy_btns_div{position:fixed;width:154px;left:10px;top:45%;background:#e7f1ff;border:2px solid #4595d5;font-weight:600;border-radius:2px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;z-index:5000}.enable_copy_btns_logo{width:100%;background:#4595d5;text-align:center;font-size:12px;color:#e7f1ff;line-height:30px;height:30px}.enable_copy_btns_btn{display:block;width:128px;height:28px;background:#7f5711;border-radius:4px;color:#fff;font-size:12px;border:0;outline:0;margin:8px auto;font-weight:700;cursor:pointer;opacity:.9}.enable_copy_btns_btn:hover{opacity:.8}.enable_copy_btns_btn:active{opacity:1}</style><style type="text/css">.src-service-contentScript-browser-contentScript-contentScript__toolFrame--2uksu {
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2147483646 !important;
+  border: none !important;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483646;
+  border: none;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 12px 0px;
+  background: white;
+  width: 324px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line {
+  animation: src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 1px;
+  height: 25px;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(1) {
+  background: #27ae60;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #f1c40f;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #e67e22;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(4) {
+  animation-delay: 540ms;
+  background: #2980b9;
+}
+@keyframes src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(2);
+  }
+}
+</style><style type="text/css">#index_crossLine__2WHMH {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 2147483645;
+}
+#index_crossLine__2WHMH::before {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-right: 1px solid red;
+  border-bottom: 1px solid red;
+  left: -100%;
+  top: -100%;
+}
+#index_crossLine__2WHMH::after {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-top: 1px solid red;
+  border-left: 1px solid red;
+  left: 0;
+  top: 0;
+}
+#index_selectArea__2G3Z3 {
+  border: 1px solid red;
+  position: fixed;
+  z-index: 2147483645;
+}
+</style><style type="text/css">.index_highlightSelector__-qiHd {
+  background-color: #fafafa !important;
+  outline: 3px dashed #1976d2 !important;
+  opacity: 0.8 !important;
+  cursor: pointer !important;
+  transition: opacity 0.5s ease !important;
+}
 </style></head>
 <body youdao="bind" inmaintabuse="1">
     <div class="header">
@@ -283,7 +387,78 @@ distribution.
         </div>
         <div class="code-block" data-id="block2">
             <div class="code-content" contenteditable="true">
-class XMLDocument;
+/*
+	gcc:
+        g++ -Wall -DTINYXML2_DEBUG tinyxml2.cpp xmltest.cpp -o gccxmltest.exe
+
+    Formatting, Artistic Style:
+        AStyle.exe --style=1tbs --indent-switches --break-closing-brackets --indent-preprocessor tinyxml2.cpp tinyxml2.h
+*/
+
+#if defined( _DEBUG ) || defined (__DEBUG__)
+#   ifndef TINYXML2_DEBUG
+#       define TINYXML2_DEBUG
+#   endif
+#endif
+
+#ifdef _MSC_VER
+#   pragma warning(push)
+#   pragma warning(disable: 4251)
+#endif
+
+#ifdef _MSC_VER
+#   ifdef TINYXML2_EXPORT
+#       define TINYXML2_LIB __declspec(dllexport)
+#   elif defined(TINYXML2_IMPORT)
+#       define TINYXML2_LIB __declspec(dllimport)
+#   else
+#       define TINYXML2_LIB
+#   endif
+#elif __GNUC__ &gt;= 4
+#   define TINYXML2_LIB __attribute__((visibility("default")))
+#else
+#   define TINYXML2_LIB
+#endif
+
+
+#if !defined(TIXMLASSERT)
+#if defined(TINYXML2_DEBUG)
+#   if defined(_MSC_VER)
+#       // "(void)0," is for suppressing C4127 warning in "assert(false)", "assert(true)" and the like
+#       define TIXMLASSERT( x )           do { if ( !((void)0,(x))) { __debugbreak(); } } while(false)
+#   elif defined (ANDROID_NDK)
+#       include &lt;android/log.h&gt;
+#       define TIXMLASSERT( x )           do { if ( !(x)) { __android_log_assert( "assert", "grinliz", "ASSERT in '%s' at %d.", __FILE__, __LINE__ ); } } while(false)
+#   else
+#       include &lt;assert.h&gt;
+#       define TIXMLASSERT                assert
+#   endif
+#else
+#   define TIXMLASSERT( x )               do {} while(false)
+#endif
+#endif
+
+/* Versioning, past 1.0.14:
+	http://semver.org/
+*/
+static const int TIXML2_MAJOR_VERSION = 11;
+static const int TIXML2_MINOR_VERSION = 0;
+static const int TIXML2_PATCH_VERSION = 0;
+
+#define TINYXML2_MAJOR_VERSION 11
+#define TINYXML2_MINOR_VERSION 0
+#define TINYXML2_PATCH_VERSION 0
+
+// A fixed element depth limit is problematic. There needs to be a
+// limit to avoid a stack overflow. However, that limit varies per
+// system, and the capacity of the stack. On the other hand, it's a trivial
+// attack that can result from ill, malicious, or even correctly formed XML,
+// so there needs to be a limit in place.
+static const int TINYXML2_MAX_ELEMENT_DEPTH = 500;
+
+namespace tinyxml2
+{
+<br><div>class XMLDocument;
 class XMLElement;
 class XMLAttribute;
 class XMLComment;
@@ -315,7 +490,7 @@ public:
         ATTRIBUTE_VALUE_LEAVE_ENTITIES  = NEEDS_NEWLINE_NORMALIZATION,
         COMMENT							= NEEDS_NEWLINE_NORMALIZATION
     };
-            </div>
+            </div></div>
         </div>
         <div class="code-block" data-id="block3">
             <div class="code-content" contenteditable="true">
@@ -2723,4 +2898,4 @@ private:
         });
     </script>
 
-<script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div><script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui></body><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div></html>
+<script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div><script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div><script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui></body><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div></html>
