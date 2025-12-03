@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN" data-arp=""><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>code notes</title>
@@ -22,18 +20,136 @@
         .header { padding: 10px 20px; background: #333; color: 333; text-align: center; }
         @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
     </style>
-</head>
-<body>
+<style type="text/css">#_copy{align-items:center;background:#4494d5;border-radius:3px;color:#fff;cursor:pointer;display:flex;font-size:13px;height:30px;justify-content:center;position:absolute;width:60px;z-index:1000}#select-tooltip,#sfModal,.modal-backdrop,div[id^=reader-helper]{display:none!important}.modal-open{overflow:auto!important}._sf_adjust_body{padding-right:0!important}.enable_copy_btns_div{position:fixed;width:154px;left:10px;top:45%;background:#e7f1ff;border:2px solid #4595d5;font-weight:600;border-radius:2px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;z-index:5000}.enable_copy_btns_logo{width:100%;background:#4595d5;text-align:center;font-size:12px;color:#e7f1ff;line-height:30px;height:30px}.enable_copy_btns_btn{display:block;width:128px;height:28px;background:#7f5711;border-radius:4px;color:#fff;font-size:12px;border:0;outline:0;margin:8px auto;font-weight:700;cursor:pointer;opacity:.9}.enable_copy_btns_btn:hover{opacity:.8}.enable_copy_btns_btn:active{opacity:1}</style><style type="text/css">.src-service-contentScript-browser-contentScript-contentScript__toolFrame--2uksu {
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2147483646 !important;
+  border: none !important;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483646;
+  border: none;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 12px 0px;
+  background: white;
+  width: 324px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line {
+  animation: src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 1px;
+  height: 25px;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(1) {
+  background: #27ae60;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #f1c40f;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #e67e22;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(4) {
+  animation-delay: 540ms;
+  background: #2980b9;
+}
+@keyframes src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(2);
+  }
+}
+</style><style type="text/css">#index_crossLine__2WHMH {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 2147483645;
+}
+#index_crossLine__2WHMH::before {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-right: 1px solid red;
+  border-bottom: 1px solid red;
+  left: -100%;
+  top: -100%;
+}
+#index_crossLine__2WHMH::after {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-top: 1px solid red;
+  border-left: 1px solid red;
+  left: 0;
+  top: 0;
+}
+#index_selectArea__2G3Z3 {
+  border: 1px solid red;
+  position: fixed;
+  z-index: 2147483645;
+}
+</style><style type="text/css">.index_highlightSelector__-qiHd {
+  background-color: #fafafa !important;
+  outline: 3px dashed #1976d2 !important;
+  opacity: 0.8 !important;
+  cursor: pointer !important;
+  transition: opacity 0.5s ease !important;
+}
+</style></head>
+<body youdao="bind" inmaintabuse="1">
     <div class="header">
         <button class="save-btn" id="saveButton">save context</button>
     </div>
     <div class="page-container">
 <div class="code-column" id="codeColumn">
         <div class="code-block" data-id="block1">
-            <div class="code-content" contenteditable="true">
-#include &lt;stdint.h&gt;
+            <div class="code-content" contenteditable="true">#ifndef TINYXML2_INCLUDED
+#define TINYXML2_INCLUDED
 
-            </div>
+#if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
+#   include &lt;ctype.h&gt;
+#   include &lt;limits.h&gt;
+#   include &lt;stdio.h&gt;
+#   include &lt;stdlib.h&gt;
+#   include &lt;string.h&gt;
+#	if defined(__PS3__)
+#		include &lt;stddef.h&gt;
+#	endif
+#else
+#   include &lt;cctype&gt;
+#   include &lt;climits&gt;
+#   include &lt;cstdio&gt;
+#   include &lt;cstdlib&gt;
+#   include &lt;cstring&gt;</div>
         </div>
         <div class="code-block" data-id="block2">
             <div class="code-content" contenteditable="true">
@@ -52,7 +168,7 @@ class XMLPrinter;
 	and entity translation if actually read. Can also store (and memory
 	manage) a traditional char[]
 
-    Isn&#x27;t clear why TINYXML2_LIB is needed; but seems to fix #719
+    Isn't clear why TINYXML2_LIB is needed; but seems to fix #719
 */
 class TINYXML2_LIB StrPair
 {
@@ -275,7 +391,7 @@ public:
         _root = item;
     }
     void Trace( const char* name ) {
-        printf( &quot;Mempool %s watermark=%d [%dk] current=%d size=%d nAlloc=%d blocks=%d\n&quot;,
+        printf( "Mempool %s watermark=%d [%dk] current=%d size=%d nAlloc=%d blocks=%d\n",
                 name, _maxAllocs, _maxAllocs * ITEM_SIZE / 1024, _currentAllocs,
                 ITEM_SIZE, _nAllocs, _blockPtrs.Size() );
     }
@@ -355,7 +471,7 @@ public:
         TIXMLASSERT( p );
 
         while( IsWhiteSpace(*p) ) {
-            if (curLineNumPtr &amp;&amp; *p == &#x27;\n&#x27;) {
+            if (curLineNumPtr &amp;&amp; *p == '\n') {
                 ++(*curLineNumPtr);
             }
             ++p;
@@ -367,7 +483,7 @@ public:
         return const_cast&lt;char*&gt;( SkipWhiteSpace( const_cast&lt;const char*&gt;(p), curLineNumPtr ) );
     }
 
-    // Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn&#x27;t
+    // Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn't
     // correct, but simple, and usually works.
     static bool IsWhiteSpace( char p )					{
         return !IsUTF8Continuation(p) &amp;&amp; isspace( static_cast&lt;unsigned char&gt;(p) );
@@ -381,19 +497,19 @@ public:
         if ( isalpha( ch ) ) {
             return true;
         }
-        return ch == &#x27;:&#x27; || ch == &#x27;_&#x27;;
+        return ch == ':' || ch == '_';
     }
 
     inline static bool IsNameChar( unsigned char ch ) {
         return IsNameStartChar( ch )
                || isdigit( ch )
-               || ch == &#x27;.&#x27;
-               || ch == &#x27;-&#x27;;
+               || ch == '.'
+               || ch == '-';
     }
 
     inline static bool IsPrefixHex( const char* p) {
         p = SkipWhiteSpace(p, 0);
-        return p &amp;&amp; *p == &#x27;0&#x27; &amp;&amp; ( *(p + 1) == &#x27;x&#x27; || *(p + 1) == &#x27;X&#x27;);
+        return p &amp;&amp; *p == '0' &amp;&amp; ( *(p + 1) == 'x' || *(p + 1) == 'X');
     }
 
     inline static bool StringEqual( const char* p, const char* q, int nChar=INT_MAX )  {
@@ -434,7 +550,7 @@ public:
 	static bool ToInt64(const char* str, int64_t* value);
     static bool ToUnsigned64(const char* str, uint64_t* value);
 	// Changes what is serialized for a boolean value.
-	// Default to &quot;true&quot; and &quot;false&quot;. Shouldn&#x27;t be changed
+	// Default to "true" and "false". Shouldn't be changed
 	// unless you have a special testing or compatibility need.
 	// Be careful: static, global, &amp; not thread safe.
 	// Be sure to set static const memory as parameters.
@@ -515,7 +631,7 @@ public:
 
     int ChildElementCount() const;
 
-    /** The meaning of &#x27;value&#x27; changes for the specific type.
+    /** The meaning of 'value' changes for the specific type.
     	@verbatim
     	Document:	empty (NULL is returned, not an empty string)
     	Element:	name of the element
@@ -659,7 +775,7 @@ public:
     /**
     	Make a copy of this node, but not its children.
     	You may pass in a Document pointer that will be
-    	the owner of the new Node. If the &#x27;document&#x27; is
+    	the owner of the new Node. If the 'document' is
     	null, then the node returned will be allocated
     	from the current Document. (this-&gt;GetDocument())
 
@@ -670,8 +786,8 @@ public:
 	/**
 		Make a copy of this node and all its children.
 
-		If the &#x27;target&#x27; is null, then the nodes will
-		be allocated in the current document. If &#x27;target&#x27;
+		If the 'target' is null, then the nodes will
+		be allocated in the current document. If 'target'
         is specified, the memory will be allocated in the
         specified XMLDocument.
 
@@ -683,7 +799,7 @@ public:
 	XMLNode* DeepClone( XMLDocument* target ) const;
 
     /**
-    	Test if 2 nodes are the same, but don&#x27;t test children.
+    	Test if 2 nodes are the same, but don't test children.
     	The 2 nodes do not need to be in the same Document.
 
     	Note: if called on a XMLDocument, this will return false.
@@ -694,7 +810,7 @@ public:
     	XML tree will be conditionally visited and the host will be called back
     	via the XMLVisitor interface.
 
-    	This is essentially a SAX interface for TinyXML-2. (Note however it doesn&#x27;t re-parse
+    	This is essentially a SAX interface for TinyXML-2. (Note however it doesn't re-parse
     	the XML for the callbacks, so the performance of TinyXML-2 is unchanged by using this
     	interface versus any other.)
 
@@ -703,7 +819,7 @@ public:
     	- http://www.saxproject.org/
     	- http://c2.com/cgi/wiki?HierarchicalVisitorPattern
 
-    	Which are both good references for &quot;visiting&quot;.
+    	Which are both good references for "visiting".
 
     	An example of using Accept():
     	@verbatim
@@ -911,7 +1027,7 @@ public:
     }
 
     /** IntValue interprets the attribute as an integer, and returns the value.
-        If the value isn&#x27;t an integer, 0 will be returned. There is no error checking;
+        If the value isn't an integer, 0 will be returned. There is no error checking;
     	use QueryIntValue() if you need error checking.
     */
 	int	IntValue() const {
@@ -1024,21 +1140,21 @@ public:
     	exists. For example:
 
     	@verbatim
-    	const char* value = ele-&gt;Attribute( &quot;foo&quot; );
+    	const char* value = ele-&gt;Attribute( "foo" );
     	@endverbatim
 
-    	The &#x27;value&#x27; parameter is normally null. However, if specified,
-    	the attribute will only be returned if the &#x27;name&#x27; and &#x27;value&#x27;
+    	The 'value' parameter is normally null. However, if specified,
+    	the attribute will only be returned if the 'name' and 'value'
     	match. This allow you to write code:
 
     	@verbatim
-    	if ( ele-&gt;Attribute( &quot;foo&quot;, &quot;bar&quot; ) ) callFooIsBar();
+    	if ( ele-&gt;Attribute( "foo", "bar" ) ) callFooIsBar();
     	@endverbatim
 
     	rather than:
     	@verbatim
-    	if ( ele-&gt;Attribute( &quot;foo&quot; ) ) {
-    		if ( strcmp( ele-&gt;Attribute( &quot;foo&quot; ), &quot;bar&quot; ) == 0 ) callFooIsBar();
+    	if ( ele-&gt;Attribute( "foo" ) ) {
+    		if ( strcmp( ele-&gt;Attribute( "foo" ), "bar" ) == 0 ) callFooIsBar();
     	}
     	@endverbatim
     */
@@ -1046,7 +1162,7 @@ public:
 
     /** Given an attribute name, IntAttribute() returns the value
     	of the attribute interpreted as an integer. The default
-        value will be returned if the attribute isn&#x27;t present,
+        value will be returned if the attribute isn't present,
         or if there is an error. (For a method with error
     	checking, see QueryIntAttribute()).
     */
@@ -1066,15 +1182,15 @@ public:
 
     /** Given an attribute name, QueryIntAttribute() returns
     	XML_SUCCESS, XML_WRONG_ATTRIBUTE_TYPE if the conversion
-    	can&#x27;t be performed, or XML_NO_ATTRIBUTE if the attribute
-    	doesn&#x27;t exist. If successful, the result of the conversion
-    	will be written to &#x27;value&#x27;. If not successful, nothing will
-    	be written to &#x27;value&#x27;. This allows you to provide default
+    	can't be performed, or XML_NO_ATTRIBUTE if the attribute
+    	doesn't exist. If successful, the result of the conversion
+    	will be written to 'value'. If not successful, nothing will
+    	be written to 'value'. This allows you to provide default
     	value:
 
     	@verbatim
     	int value = 10;
-    	QueryIntAttribute( &quot;foo&quot;, &amp;value );		// if &quot;foo&quot; isn&#x27;t found, value will still be 10
+    	QueryIntAttribute( "foo", &amp;value );		// if "foo" isn't found, value will still be 10
     	@endverbatim
     */
     XMLError QueryIntAttribute( const char* name, int* value ) const				{
@@ -1151,19 +1267,19 @@ public:
 
     /** Given an attribute name, QueryAttribute() returns
     	XML_SUCCESS, XML_WRONG_ATTRIBUTE_TYPE if the conversion
-    	can&#x27;t be performed, or XML_NO_ATTRIBUTE if the attribute
-    	doesn&#x27;t exist. It is overloaded for the primitive types,
+    	can't be performed, or XML_NO_ATTRIBUTE if the attribute
+    	doesn't exist. It is overloaded for the primitive types,
 		and is a generally more convenient replacement of
 		QueryIntAttribute() and related functions.
 
 		If successful, the result of the conversion
-    	will be written to &#x27;value&#x27;. If not successful, nothing will
-    	be written to &#x27;value&#x27;. This allows you to provide default
+    	will be written to 'value'. If not successful, nothing will
+    	be written to 'value'. This allows you to provide default
     	value:
 
     	@verbatim
     	int value = 10;
-    	QueryAttribute( &quot;foo&quot;, &amp;value );		// if &quot;foo&quot; isn&#x27;t found, value will still be 10
+    	QueryAttribute( "foo", &amp;value );		// if "foo" isn't found, value will still be 10
     	@endverbatim
     */
 	XMLError QueryAttribute( const char* name, int* value ) const {
@@ -1258,7 +1374,7 @@ public:
     	and concise, GetText() is limited compared to getting the XMLText child
     	and accessing it directly.
 
-    	If the first child of &#x27;this&#x27; is a XMLText, the GetText()
+    	If the first child of 'this' is a XMLText, the GetText()
     	returns the character string of the Text node, else null is returned.
 
     	This is a convenient method for getting the text of simple contained text:
@@ -1267,7 +1383,7 @@ public:
     		const char* str = fooElement-&gt;GetText();
     	@endverbatim
 
-    	&#x27;str&#x27; will be a pointer to &quot;This is text&quot;.
+    	'str' will be a pointer to "This is text".
 
     	Note that this function can be misleading. If the element foo was created from
     	this XML:
@@ -1275,12 +1391,12 @@ public:
     		&lt;foo&gt;&lt;b&gt;This is text&lt;/b&gt;&lt;/foo&gt;
     	@endverbatim
 
-    	then the value of str would be null. The first child node isn&#x27;t a text node, it is
+    	then the value of str would be null. The first child node isn't a text node, it is
     	another element. From this XML:
     	@verbatim
     		&lt;foo&gt;This is &lt;b&gt;text&lt;/b&gt;&lt;/foo&gt;
     	@endverbatim
-    	GetText() will return &quot;This is &quot;.
+    	GetText() will return "This is ".
     */
     const char* GetText() const;
 
@@ -1288,13 +1404,13 @@ public:
     	and concise, SetText() is limited compared to creating an XMLText child
     	and mutating it directly.
 
-    	If the first child of &#x27;this&#x27; is a XMLText, SetText() sets its value to
+    	If the first child of 'this' is a XMLText, SetText() sets its value to
 		the given string, otherwise it will create a first child that is an XMLText.
 
     	This is a convenient method for setting the text of simple contained text:
     	@verbatim
     	&lt;foo&gt;This is text&lt;/foo&gt;
-    		fooElement-&gt;SetText( &quot;Hullaballoo!&quot; );
+    		fooElement-&gt;SetText( "Hullaballoo!" );
      	&lt;foo&gt;Hullaballoo!&lt;/foo&gt;
 		@endverbatim
 
@@ -1304,7 +1420,7 @@ public:
     		&lt;foo&gt;&lt;b&gt;This is text&lt;/b&gt;&lt;/foo&gt;
     	@endverbatim
 
-    	then it will not change &quot;This is text&quot;, but rather prefix it with a text element:
+    	then it will not change "This is text", but rather prefix it with a text element:
     	@verbatim
     		&lt;foo&gt;Hullaballoo!&lt;b&gt;This is text&lt;/b&gt;&lt;/foo&gt;
     	@endverbatim
@@ -1345,13 +1461,13 @@ public:
     	@endverbatim
 
     	The QueryIntText() and similar functions provide a safe and easier way to get to the
-    	&quot;value&quot; of x and y.
+    	"value" of x and y.
 
     	@verbatim
     		int x = 0;
     		float y = 0;	// types of x and y are contrived for example
-    		const XMLElement* xElement = pointElement-&gt;FirstChildElement( &quot;x&quot; );
-    		const XMLElement* yElement = pointElement-&gt;FirstChildElement( &quot;y&quot; );
+    		const XMLElement* xElement = pointElement-&gt;FirstChildElement( "x" );
+    		const XMLElement* yElement = pointElement-&gt;FirstChildElement( "y" );
     		xElement-&gt;QueryIntText( &amp;x );
     		yElement-&gt;QueryFloatText( &amp;y );
     	@endverbatim
@@ -1418,7 +1534,7 @@ class TINYXML2_LIB XMLDocument : public XMLNode
 {
     friend class XMLElement;
     // Gives access to SetError and Push/PopDepth, but over-access for everything else.
-    // Wishing C++ had &quot;internal&quot; scope.
+    // Wishing C++ had "internal" scope.
     friend class XMLNode;
     friend class XMLText;
     friend class XMLComment;
@@ -1443,9 +1559,9 @@ public:
     	Returns XML_SUCCESS (0) on success, or
     	an errorID.
 
-    	You may optionally pass in the &#x27;nBytes&#x27;, which is
+    	You may optionally pass in the 'nBytes', which is
     	the number of bytes which will be parsed. If not
-    	specified, TinyXML-2 will assume &#x27;xml&#x27; points to a
+    	specified, TinyXML-2 will assume 'xml' points to a
     	null terminated string.
     */
     XMLError Parse( const char* xml, size_t nBytes=static_cast&lt;size_t&gt;(-1) );
@@ -1461,7 +1577,7 @@ public:
     	Load an XML file from disk. You are responsible
     	for providing and closing the FILE*.
 
-        NOTE: The file should be opened as binary (&quot;rb&quot;)
+        NOTE: The file should be opened as binary ("rb")
         not text in order for TinyXML-2 to correctly
         do newline normalization.
 
@@ -1555,10 +1671,10 @@ public:
     	this Document. The memory for the object
     	is managed by the Document.
 
-    	If the &#x27;text&#x27; param is null, the standard
+    	If the 'text' param is null, the standard
     	declaration is used.:
     	@verbatim
-    		&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+    		&lt;?xml version="1.0" encoding="UTF-8"?&gt;
     	@endverbatim
     */
     XMLDeclaration* NewDeclaration( const char* text=0 );
@@ -1589,7 +1705,7 @@ public:
 	const char* ErrorName() const;
     static const char* ErrorIDToName(XMLError errorID);
 
-    /** Returns a &quot;long form&quot; error description. A hopefully helpful
+    /** Returns a "long form" error description. A hopefully helpful
         diagnostic with location, line number, and/or additional info.
     */
 	const char* ErrorStr() const;
@@ -1611,7 +1727,7 @@ public:
 		The target will be completely cleared before the copy.
 		If you want to copy a sub-tree, see XMLNode::DeepClone().
 
-		NOTE: that the &#x27;target&#x27; must be non-null.
+		NOTE: that the 'target' must be non-null.
 	*/
 	void DeepCopy(XMLDocument* target) const;
 
@@ -1642,7 +1758,7 @@ private:
     int				_parseCurLineNum;
 	int				_parsingDepth;
 	// Memory tracking does add some overhead.
-	// However, the code assumes that you don&#x27;t
+	// However, the code assumes that you don't
 	// have a bunch of unlinked nodes around.
 	// Therefore it takes less memory to track
 	// in the document vs. a linked list in the XMLNode,
@@ -1892,7 +2008,7 @@ StrPair( const StrPair&amp; other );	// not supported
 
 
 /*
-	A dynamic array of Plain Old Data. Doesn&#x27;t support constructors, etc.
+	A dynamic array of Plain Old Data. Doesn't support constructors, etc.
 	Has a small initial memory pool, so that low or no usage will not
 	cause a call to new/delete
 */
@@ -1930,10 +2046,10 @@ If you call the Accept() method, it requires being passed a XMLVisitor
 	you will get called with a VisitEnter/VisitExit pair. Nodes that are always leafs
 	are simply called with Visit().
 
-	If you return &#x27;true&#x27; from a Visit method, recursive parsing will continue. If you return
+	If you return 'true' from a Visit method, recursive parsing will continue. If you return
 	false, &lt;b&gt;no children of this node or its siblings&lt;/b&gt; will be visited.
 
-	All flavors of Visit methods have a default implementation that returns &#x27;true&#x27; (continue
+	All flavors of Visit methods have a default implementation that returns 'true' (continue
 	visiting). You need to only override methods that are interesting to you.
 
 	Generally Accept() is called on the XMLDocument, although all nodes support visiting.
@@ -2049,7 +2165,7 @@ inline NodeType* XMLDocument::CreateUnlinkedNode( MemPoolT&lt;PoolElementSize&gt
         <div class="code-block" data-id="block30">
             <div class="code-content" contenteditable="true">
 XMLHandle docHandle( &amp;document );
-	XMLElement* child2 = docHandle.FirstChildElement( &quot;Document&quot; ).FirstChildElement( &quot;Element&quot; ).FirstChildElement().NextSiblingElement();
+	XMLElement* child2 = docHandle.FirstChildElement( "Document" ).FirstChildElement( "Element" ).FirstChildElement().NextSiblingElement();
 	if ( child2 )
 	{
 		// do something useful
@@ -2069,7 +2185,7 @@ XMLHandle docHandle( &amp;document );
 
 /**
 	A variant of the XMLHandle class for working with const XMLNodes and Documents. It is the
-	same in all regards, except for the &#x27;const&#x27; qualifiers. See XMLHandle for API.
+	same in all regards, except for the 'const' qualifiers. See XMLHandle for API.
 */
 
 
@@ -2111,8 +2227,8 @@ XMLHandle docHandle( &amp;document );
 
 	@verbatim
 	XMLPrinter printer( fp );
-	printer.OpenElement( &quot;foo&quot; );
-	printer.PushAttribute( &quot;foo&quot;, &quot;bar&quot; );
+	printer.OpenElement( "foo" );
+	printer.PushAttribute( "foo", "bar" );
 	printer.CloseElement();
 	@endverbatim
 */
@@ -2121,7 +2237,7 @@ XMLHandle docHandle( &amp;document );
     /** Construct the printer. If the FILE* is specified,
     	this will print to the FILE. Else it will print
     	to memory, and the result is available in CStr().
-    	If &#x27;compact&#x27; is set to true, then output is created
+    	If 'compact' is set to true, then output is created
     	with only required whitespace and newlines.
     */
     XMLPrinter( FILE* file=0, bool compact = false, int depth = 0, EscapeAposCharsInAttributes aposInAttributes = ESCAPE_APOS_CHARS_IN_ATTRIBUTES );
@@ -2476,5 +2592,5 @@ private:
             setTimeout(() => this.textContent = 'save context', 1500);
         });
     </script>
-</body>
-</html>
+
+<script src="chrome-extension://onepmapfbjohnegdmfhndpefjkppbjkm/sm.bundle.js" data-pname="supercopy-v3" data-asset-path="https://spc4.s3.ap-east-1.amazonaws.com"></script><stock-ui data-wxt-shadow-root=""></stock-ui></body><div style="all: initial;"><div id="__hcfy__" style="all: initial;"></div></div></html>
