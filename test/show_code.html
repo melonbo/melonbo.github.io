@@ -3,258 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>代码与注释查看器</title>
+    <title>完全融合的隐藏按钮</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        .container {
+        
+        body {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
             display: flex;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .code-column, .comment-column {
-            height: 100%;
-            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
-
-        .code-column {
-            width: 50%;
-            background-color: #1e1e1e;
-            color: #dcdcdc;
-            border-right: 1px solid #333;
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #2a2a2a;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            padding: 30px;
         }
-
-        .comment-column {
-            width: 50%;
-            background-color: #f8f9fa;
-            color: #333;
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #444;
         }
-
-        .block {
-            margin-bottom: 30px;
-            padding: 15px;
-            border-radius: 6px;
-        }
-
-        .code-block {
-            background-color: #2d2d2d;
-            position: relative;
-        }
-
-        .comment-block {
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        h3 {
+        
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            font-size: 16px;
+            color: #f0f0f0;
         }
-
-        .code-block h3 {
-            color: #61afef;
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
         }
-
-        .comment-block h3 {
-            color: #2d3748;
+        
+        .demo-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
-
-        .code-content {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
+        
+        .demo-card {
+            background: #333;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            min-height: 200px;
         }
-
-        .comment-content {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #4a5568;
+        
+        .demo-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #feca57;
         }
-
-        .copy-btn {
+        
+        .header {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .explanation {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* 完全隐藏的按钮样式 */
+        .save-btn {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 4px 8px;
-            background: #61afef;
-            color: white;
+            background: transparent;
             border: none;
-            border-radius: 4px;
+            color: transparent;
             cursor: pointer;
-            font-size: 12px;
-            transition: background 0.2s;
+            font-size: 1rem;
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            outline: none;
         }
-
-        .copy-btn:hover {
-            background: #4a98d4;
+        
+        .save-btn:hover::after {
+            content: "保存";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
-
-        .active {
-            border: 2px solid #61afef;
+        
+        /* 不同背景的示例 */
+        .header-blue {
+            background: #1a237e;
         }
-
-        .comment-block.active {
-            border-left: 4px solid #61afef;
-            background-color: #f0f8ff;
+        
+        .header-green {
+            background: #1b5e20;
         }
-
+        
+        .header-red {
+            background: #b71c1c;
+        }
+        
+        .header-pattern {
+            background: repeating-linear-gradient(
+                45deg,
+                #444,
+                #444 10px,
+                #555 10px,
+                #555 20px
+            );
+        }
+        
+        .highlight {
+            color: #feca57;
+            font-weight: bold;
+        }
+        
+        .tip {
+            background: #3a3a3a;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-left: 4px solid #feca57;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #333;
+            border-radius: 8px;
+        }
+        
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
+            .demo-section {
+                grid-template-columns: 1fr;
             }
-            .code-column, .comment-column {
-                width: 100%;
-                height: 50%;
+            
+            h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="code-column" id="codeColumn"></div>
-        <div class="comment-column" id="commentColumn"></div>
+        <header>
+            <h1>完全融合的隐藏按钮</h1>
+            <p class="subtitle">实现按钮与背景完全融合，无任何高亮效果</p>
+        </header>
+        
+        <div class="demo-section">
+            <div class="demo-card">
+                <h2 class="demo-title">灰色背景隐藏按钮</h2>
+                <div class="header">
+                    <button class="save-btn" id="saveButton1">~~</button>
+                    <p>标题区域 - 将鼠标移动到右上角会发现隐藏按钮</p>
+                </div>
+                
+                <div class="code-block">
+&lt;div class="header"&gt;
+    &lt;button class="save-btn" id="saveButton"&gt;~~&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.header {
+    background: #444;
+    position: relative;
+}
+
+.save-btn {
+    background: transparent;  /* 透明背景 */
+    border: none;            /* 无边框 */
+    color: transparent;       /* 透明文字 */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+&lt;/style&gt;
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h2 class="demo-title">蓝色背景隐藏按钮</h2>
+                <div class="header header-blue">
+                    <button class="save-btn" id="saveButton2">~~</button>
+                    <p>标题区域 - 将鼠标移动到右上角会发现隐藏按钮</p>
+                </div>
+                
+                <div class="code-block">
+.header-blue {
+    background: #1a237e;
+}
+
+.save-btn {
+    background: transparent;
+    border: none;
+    color: transparent;
+    /* 其他样式相同 */
+}
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h2 class="demo-title">图案背景隐藏按钮</h2>
+                <div class="header header-pattern">
+                    <button class="save-btn" id="saveButton3">~~</button>
+                    <p>标题区域 - 将鼠标移动到右上角会发现隐藏按钮</p>
+                </div>
+                
+                <div class="code-block">
+.header-pattern {
+    background: repeating-linear-gradient(
+        45deg,
+        #444,
+        #444 10px,
+        #555 10px,
+        #555 20px
+    );
+}
+
+.save-btn {
+    background: transparent;
+    border: none;
+    color: transparent;
+    /* 其他样式相同 */
+}
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h2>实现原理</h2>
+            <p>要实现按钮与背景完全融合，不保留任何高亮效果，需要以下关键步骤：</p>
+            
+            <ol>
+                <li>将按钮的<span class="highlight">背景设置为透明</span>（transparent）</li>
+                <li>将按钮的<span class="highlight">边框设置为无</span>（border: none）</li>
+                <li>将按钮的<span class="highlight">文字颜色设置为透明</span>（color: transparent）</li>
+                <li>移除所有<span class="highlight">阴影效果</span>（box-shadow: none）</li>
+                <li>使用<span class="highlight">绝对定位</span>将按钮放置在合适位置</li>
+            </ol>
+            
+            <div class="tip">
+                <strong>提示：</strong> 为了提升用户体验，可以添加悬停提示，让用户知道隐藏按钮的存在。
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>使用说明</h2>
+            <p>1. 将鼠标移动到每个示例的右上角区域，会发现隐藏的按钮</p>
+            <p>2. 点击隐藏按钮会触发保存功能（在控制台查看输出）</p>
+            <p>3. 按钮完全透明，与背景完美融合，无任何视觉痕迹</p>
+        </div>
+        
+        <div class="code-block">
+/* 通用完全隐藏按钮样式 */
+.save-btn {
+    background: transparent;     /* 透明背景 */
+    border: none;                /* 无边框 */
+    color: transparent;          /* 透明文字 */
+    cursor: pointer;             /* 指针样式提示可点击 */
+    outline: none;               /* 移除焦点轮廓 */
+    position: absolute;          /* 精确定位 */
+    /* 根据需要调整位置 */
+    top: 20px;
+    right: 20px;
+    width: 40px;                 /* 设置点击区域 */
+    height: 40px;
+    z-index: 10;                /* 确保在最上层 */
+}
+
+/* 可选：添加悬停提示 */
+.save-btn:hover::after {
+    content: "保存";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+        </div>
     </div>
 
     <script>
-        // 获取当前HTML文件名（不含扩展名）
-        const htmlFileName = window.location.pathname.split('/').pop().replace('.html', '');
-        const jsonFilePath = `${htmlFileName}.json`;
-
-        // 加载JSON文件
-        fetch(jsonFilePath)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`无法加载JSON文件: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                renderBlocks(data.blocks);
-                setupEventListeners();
-            })
-            .catch(error => {
-                console.error('加载失败:', error);
-                document.body.innerHTML = `<div style="padding: 20px; color: red;">错误: 无法加载 ${jsonFilePath} 文件</div>`;
+        // 为所有隐藏按钮添加点击事件
+        document.querySelectorAll('.save-btn').forEach((button, index) => {
+            button.addEventListener('click', function() {
+                console.log(`保存按钮 ${index + 1} 被点击了！`);
+                alert(`保存操作已完成！(按钮 ${index + 1})`);
             });
-
-        // 渲染代码块和注释块
-        function renderBlocks(blocks) {
-            const codeColumn = document.getElementById('codeColumn');
-            const commentColumn = document.getElementById('commentColumn');
-
-            blocks.forEach((block, index) => {
-                const blockId = `block-${index}`;
-                
-                // 创建代码块
-                const codeBlock = document.createElement('div');
-                codeBlock.className = 'block code-block';
-                codeBlock.dataset.id = blockId;
-                codeBlock.innerHTML = `
-                    <h3>${block.title}</h3>
-                    <button class="copy-btn">复制代码</button>
-                    <div class="code-content">${escapeHtml(block.code)}</div>
-                `;
-                codeColumn.appendChild(codeBlock);
-
-                // 创建注释块
-                const commentBlock = document.createElement('div');
-                commentBlock.className = 'block comment-block';
-                commentBlock.dataset.id = blockId;
-                commentBlock.innerHTML = `
-                    <h3>${block.title}</h3>
-                    <div class="comment-content">${block.comment || ''}</div>
-                `;
-                commentColumn.appendChild(commentBlock);
-            });
-        }
-
-        // HTML转义函数，防止代码中的特殊字符被解析
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 复制代码功能
-            document.querySelectorAll('.copy-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const code = this.nextElementSibling.textContent;
-                    navigator.clipboard.writeText(code).then(() => {
-                        const originalText = this.textContent;
-                        this.textContent = '复制成功';
-                        setTimeout(() => {
-                            this.textContent = originalText;
-                        }, 1500);
-                    }).catch(err => {
-                        console.error('复制失败:', err);
-                        this.textContent = '复制失败';
-                        setTimeout(() => {
-                            this.textContent = '复制代码';
-                        }, 1500);
-                    });
-                });
-            });
-
-            // 滚动同步和高亮功能
-            const codeColumn = document.getElementById('codeColumn');
-            const commentColumn = document.getElementById('commentColumn');
-
-            // 处理代码栏滚动
-            //codeColumn.addEventListener('scroll', syncScroll);
-            
-            // 处理注释栏滚动
-            //commentColumn.addEventListener('scroll', syncScroll);
-
-            function syncScroll(e) {
-                const isCodeScroll = e.target === codeColumn;
-                const sourceColumn = isCodeScroll ? codeColumn : commentColumn;
-                const targetColumn = isCodeScroll ? commentColumn : codeColumn;
-
-                // 找到当前可视区域内的活跃块
-                let activeBlock = null;
-                sourceColumn.querySelectorAll('.block').forEach(block => {
-                    const rect = block.getBoundingClientRect();
-                    // 当块的大部分在可视区域内时视为活跃块
-                    if (rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5) {
-                    //if (rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2) {
-                        activeBlock = block;
-                    }
-                });
-
-                // 更新高亮状态
-                document.querySelectorAll('.block').forEach(block => {
-                    block.classList.remove('active');
-                });
-
-                if (activeBlock) {
-                    // 高亮对应块
-                    activeBlock.classList.add('active');
-                    const targetBlock = targetColumn.querySelector(`.block[data-id="${activeBlock.dataset.id}"]`);
-                    if (targetBlock) {
-                        targetBlock.classList.add('active');
-                        
-                        // 同步滚动位置（只在源滚动时同步目标）
-                        if (!isNaN(targetBlock.offsetTop)) {
-                            targetColumn.scrollTop = targetBlock.offsetTop - 20; // 偏移20px留出顶部空间
-                        }
-                    }
-                }
+        });
+        
+        // 添加键盘快捷键支持
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S 或 Cmd+S 保存
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                console.log('通过键盘快捷键触发保存');
+                alert('通过键盘快捷键触发保存操作！');
             }
-        }
+        });
     </script>
 </body>
 </html>

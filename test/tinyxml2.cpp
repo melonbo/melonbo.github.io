@@ -169,12 +169,13 @@ static const Entity entities[NUM_ENTITIES] = {
     { "gt",	2,		'>'	 }
 };
 
-
+namespace tinyxml2xx
+{
 StrPair::~StrPair()
 {
     Reset();
 }
-
+}
 
 void StrPair::TransferTo( StrPair* other )
 {

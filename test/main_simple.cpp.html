@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .save-btn { background: transparent; border: none; color: transparent;}
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        .header { padding: 10px 20px; background: #333; color: white; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="save-btn" id="saveButton">save context</button>
+    </div>
+    <div class="page-container">
+        <div class="code-column" id="codeColumn">
+            <div class="code-block" data-id="block1" id="block1">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block2" id="block2">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block3" id="block3">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block4" id="block4">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block5" id="block5">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block6" id="block6">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+        </div>
+        <div class="explain-column" id="explainColumn">
+            <div class="explain-block" data-id="block1" id="explainBlock1">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block2" id="explainBlock2">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block3" id="explainBlock3">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block4" id="explainBlock4">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block5" id="explainBlock5">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block6" id="explainBlock6">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const blockCodeContents = {
+            block1: '### block 1 : 1 - 6\n\n```cpp\nint sum(int a,int b)\n{\n\tint temp=0;\n\ttemp=a+b;\n\treturn temp;\n}\n```\n',
+            block2: '### block 2 : 8 - 15\n\n```cpp\nint main()\n{\n\tint a=10;\n\tint b=20;\n \n\tint ret=sum(a,b);\n\treturn 0;\n}\n```\n',
+            block3: '### block 3 : 18 - 23\n\n```cpp\nint sum(int a,int b)\n{\n\tint temp=0;\n\ttemp=a+b;\n\treturn temp;\n}\n```\n',
+            block4: '### block 4 : 25 - 32\n\n```cpp\nint main()\n{\n\tint a=10;\n\tint b=20;\n \n\tint ret=sum(a,b);\n\treturn 0;\n}\n```\n',
+            block5: '### block 5 : 34 - 39\n\n```cpp\nint sum(int a,int b)\n{\n\tint temp=0;\n\ttemp=a+b;\n\treturn temp;\n}\n```\n',
+            block6: '### block 6 : 41 - 48\n\n```cpp\nint main()\n{\n\tint a=10;\n\tint b=20;\n \n\tint ret=sum(a,b);\n\treturn 0;\n}\n```\n'
+        };
+
+        const blockExplainContents = {
+            block1: '### block 1\n',
+            block2: '### block 2\n',
+            block3: '### block 3\n',
+            block4: '### block 4\n',
+            block5: '### block 5\n',
+            block6: '### block 6\n'
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+            // 使用循环写入所有代码块和解释块内容
+            for (let i = 1; i <= 6; i++) {
+                const blockId = `block${i}`;
+                const explainBlockId = `explainBlock${i}`;
+
+                // 写入代码块内容
+                document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
+
+                // 写入解释块内容
+                document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+    </script>
+</body>
+</html>

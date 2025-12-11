@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .code-content {
+            font-family: 'Consolas', monospace;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <div id="block1">
+        <div class="code-content" contenteditable="true"></div>
+    </div>
+    <script>
+        const blockCodeContents = {
+            block1: '### block 1\n\n```cpp\nint sum(int a,int b)\n{\n\tint temp=0;\n\ttemp=a+b;\n\treturn temp;\n}\n```\n'
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('block1').querySelector('.code-content').innerHTML = marked.parse(blockCodeContents.block1);
+        });
+    </script>
+</body>
+</html>

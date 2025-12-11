@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码解释页面</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .header {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            text-align: center;
+        }
+        .page-container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        .code-column, .explain-column {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .code-block, .explain-block {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .code-block.active {
+            border: 2px solid #61afef;
+        }
+        .explain-block.active {
+            border-left: 4px solid #61afef;
+            background: #f0f8ff;
+        }
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            .code-column, .explain-column {
+                width: 100%;
+                height: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>代码解释</h1>
+        <button id="saveButton">save context</button>
+    </div>
+
+    <div class="page-container">
+        <div class="code-column" id="codeColumn">
+            <div class="code-block" data-id="block1" id="block1">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block2" id="block2">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block3" id="block3">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block4" id="block4">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block5" id="block5">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+
+            <div class="code-block" data-id="block6" id="block6">
+                <div class="code-content" contenteditable="true"></div>
+            </div>
+        </div>
+
+        <div class="explain-column" id="explainColumn">
+            <div class="explain-block" data-id="block1" id="explainBlock1">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block2" id="explainBlock2">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block3" id="explainBlock3">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block4" id="explainBlock4">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block5" id="explainBlock5">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+
+            <div class="explain-block" data-id="block6" id="explainBlock6">
+                <div class="explain-content" contenteditable="true"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const blockCodeContents = {
+            block1: `block 1 : 1 - 6
+int sum(int a,int b)
+{
+    int temp=0;
+    temp=a+b;
+    return temp;
+}`,
+            block2: `block 2 : 8 - 15
+int main()
+{
+    int a=10;
+    int b=20;
+ 
+    int ret=sum(a,b);
+    return 0;
+}`,
+            block3: `block 3 : 18 - 23
+int sum(int a,int b)
+{
+    int temp=0;
+    temp=a+b;
+    return temp;
+}`,
+            block4: `block 4 : 25 - 32
+int main()
+{
+    int a=10;
+    int b=20;
+ 
+    int ret=sum(a,b);
+    return 0;
+}`,
+            block5: `block 5 : 34 - 39
+int sum(int a,int b)
+{
+    int temp=0;
+    temp=a+b;
+    return temp;
+}`,
+            block6: `block 6 : 41 - 48
+int main()
+{
+    int a=10;
+    int b=20;
+ 
+    int ret=sum(a,b);
+    return 0;
+}`
+        };
+
+        const blockExplainContents = {
+            block1: 'block 1',
+            block2: 'block 2',
+            block3: 'block 3',
+            block4: 'block 4',
+            block5: 'block 5',
+            block6: 'block 6'
+        };
+
+        // 获取blockCodeContents的item大小
+        const blockCodeContentsSize = Object.keys(blockCodeContents).length;
+        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
+
+        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
+        window.addEventListener('DOMContentLoaded', function() {
+            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
+            for (let i = 1; i <= blockCodeContentsSize; i++) {
+                const blockId = `block${i}`;
+                const explainBlockId = `explainBlock${i}`;
+
+                // 写入代码块内容
+                document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
+
+                // 写入解释块内容
+                document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+
+        const codeColumn = document.getElementById('codeColumn');
+        codeColumn.addEventListener('scroll', () => {
+            let active = null;
+            document.querySelectorAll('.code-block').forEach(block => {
+                const rect = block.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 200) active = block;
+            });
+            document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+            if (active) {
+                active.classList.add('active');
+                document.querySelector(`.explain-column .explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            const currentPath = window.location.pathname;
+            const originalFileName = currentPath.split(/[\\/]/).pop();
+            const fileName = originalFileName
+                                 ? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+                                 : 'code_notes.html';
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+
+            this.textContent = 'save success';
+            setTimeout(() => this.textContent = 'save context', 1500);
+        });
+    </script>
+</body>
+</html>

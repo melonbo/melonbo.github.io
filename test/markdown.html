@@ -1,44 +1,412 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>Markdown in HTML</title>
-    <!-- 引入marked.js -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown表格等宽列实现</title>
     <style>
-        .markdown-content { 
-            max-width: 800px; 
-            margin: 0 auto; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3498db, #2c3e50);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            color: #3498db;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #2980b9;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+        
+        tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+        
+        /* 等宽表格样式 */
+        .equal-width-table {
+            table-layout: fixed;
+        }
+        
+        .equal-width-table th,
+        .equal-width-table td {
+            width: 50%;
+        }
+        
+        .equal-width-table-auto {
+            table-layout: fixed;
+            width: 100%;
+        }
+        
+        .equal-width-table-auto th,
+        .equal-width-table-auto td {
+            width: 50%;
+        }
+        
+        /* 代码块样式 */
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .markdown-example {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .comparison-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .note {
+            background-color: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="markdown-container"></div>
+    <div class="container">
+        <header>
+            <h1>Markdown表格等宽列实现</h1>
+            <p class="subtitle">多种方法实现两列等宽表格</p>
+        </header>
+        
+        <div class="content">
+            <div class="section">
+                <h2>问题描述</h2>
+                <p>在Markdown中创建表格时，默认情况下列宽会根据内容自动调整，这可能导致两列宽度不一致。如何确保两列宽度相等？</p>
+                
+                <div class="note">
+                    <p><strong>注意：</strong> 纯Markdown本身不提供直接控制表格列宽的功能，但可以通过HTML和CSS来实现。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>解决方案</h2>
+                
+                <h3>1. 使用HTML表格并设置CSS样式</h3>
+                <p>最可靠的方法是在Markdown中嵌入HTML表格，并通过CSS设置等宽列。</p>
+                
+                <div class="markdown-example">
+                    <p><strong>Markdown+HTML混合写法：</strong></p>
+                    <div class="code-block">
+| 方法 | 描述 |
+|------|------|
+| 方法1 | 使用HTML表格 |
+| 方法2 | 使用CSS样式 |
 
-    <script>
-        // Markdown内容
-        const markdownText = `
-# 这是一个标题
-
-这是一个**Markdown**示例。
-
-## 功能列表
-- ✅ 支持标题
-- ✅ 支持**粗体**和*斜体*
-- ✅ 支持代码块：\`code\`
-- ✅ 支持列表
-
-\`\`\`javascript
-// 代码示例
-function hello() {
-    console.log("Hello Markdown!");
+&lt;table class="equal-width-table"&gt;
+  &lt;tr&gt;
+    &lt;th&gt;产品&lt;/th&gt;
+    &lt;th&gt;描述&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;笔记本电脑&lt;/td&gt;
+    &lt;td&gt;高性能计算设备，适合办公和游戏&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;智能手机&lt;/td&gt;
+    &lt;td&gt;便携式通信设备，功能丰富&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+                    </div>
+                </div>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>默认Markdown表格</h4>
+                        <table>
+                            <tr>
+                                <th>产品</th>
+                                <th>描述</th>
+                            </tr>
+                            <tr>
+                                <td>笔记本电脑</td>
+                                <td>高性能计算设备，适合办公和游戏</td>
+                            </tr>
+                            <tr>
+                                <td>智能手机</td>
+                                <td>便携式通信设备，功能丰富</td>
+                            </tr>
+                        </table>
+                        <p class="warning">列宽根据内容自动调整，不等宽</p>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <h4>等宽列表格</h4>
+                        <table class="equal-width-table">
+                            <tr>
+                                <th>产品</th>
+                                <th>描述</th>
+                            </tr>
+                            <tr>
+                                <td>笔记本电脑</td>
+                                <td>高性能计算设备，适合办公和游戏</td>
+                            </tr>
+                            <tr>
+                                <td>智能手机</td>
+                                <td>便携式通信设备，功能丰富</td>
+                            </tr>
+                        </table>
+                        <p class="note">两列宽度相等</p>
+                    </div>
+                </div>
+                
+                <h3>2. 使用CSS控制Markdown生成的表格</h3>
+                <p>如果您的Markdown处理器支持自定义CSS，可以直接为生成的表格添加样式。</p>
+                
+                <div class="code-block">
+/* 使所有两列表格等宽 */
+table:has(th:nth-child(2):last-child) {
+  table-layout: fixed;
+  width: 100%;
 }
-\`\`\`
-        `;
 
-        // 转换为HTML
-        document.getElementById('markdown-container').innerHTML = 
-            marked.parse(markdownText);
-    </script>
+table:has(th:nth-child(2):last-child) th,
+table:has(th:nth-child(2):last-child) td {
+  width: 50%;
+}
+                </div>
+                
+                <h3>3. 使用特定Markdown扩展</h3>
+                <p>某些Markdown处理器支持表格属性扩展，可以直接在Markdown中指定列宽。</p>
+                
+                <div class="markdown-example">
+                    <p><strong>示例（部分处理器支持）：</strong></p>
+                    <div class="code-block">
+| {width=50%} 产品 | {width=50%} 描述 |
+|------------------|------------------|
+| 笔记本电脑 | 高性能计算设备 |
+| 智能手机 | 便携式通信设备 |
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <p><strong>注意：</strong> 这种方法不是标准Markdown功能，取决于您使用的Markdown处理器是否支持。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>完整示例</h2>
+                <p>以下是一个完整的Markdown文档示例，展示了如何创建等宽列表格：</p>
+                
+                <div class="code-block">
+# 产品比较
+
+## 默认表格（列宽不等）
+
+| 特性 | 描述 |
+|------|------|
+| 屏幕尺寸 | 15.6英寸全高清显示屏 |
+| 处理器 | Intel Core i7-12700H |
+
+## 等宽列表格
+
+&lt;table class="equal-width-table-auto"&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;屏幕尺寸&lt;/td&gt;
+&lt;td&gt;15.6英寸全高清显示屏&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;处理器&lt;/td&gt;
+&lt;td&gt;Intel Core i7-12700H&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+## 结论
+
+使用HTML表格结合CSS是实现等宽列最可靠的方法。
+                </div>
+                
+                <h3>实际效果：</h3>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>默认Markdown表格</h4>
+                        <table>
+                            <tr>
+                                <th>特性</th>
+                                <th>描述</th>
+                            </tr>
+                            <tr>
+                                <td>屏幕尺寸</td>
+                                <td>15.6英寸全高清显示屏</td>
+                            </tr>
+                            <tr>
+                                <td>处理器</td>
+                                <td>Intel Core i7-12700H</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <h4>等宽列表格</h4>
+                        <table class="equal-width-table-auto">
+                            <tr>
+                                <th>特性</th>
+                                <th>描述</th>
+                            </tr>
+                            <tr>
+                                <td>屏幕尺寸</td>
+                                <td>15.6英寸全高清显示屏</td>
+                            </tr>
+                            <tr>
+                                <td>处理器</td>
+                                <td>Intel Core i7-12700H</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>最佳实践建议</h2>
+                <ul>
+                    <li>对于简单的等宽需求，使用HTML表格结合CSS是最可靠的方法</li>
+                    <li>如果您的Markdown处理器支持CSS类，可以定义专用样式</li>
+                    <li>考虑使用<code>table-layout: fixed</code>确保列宽精确控制</li>
+                    <li>测试在不同屏幕尺寸下的显示效果，确保响应式设计</li>
+                </ul>
+                
+                <div class="note">
+                    <p><strong>提示：</strong> 如果您使用的是GitHub Markdown或其他特定平台，请查阅该平台的文档，了解其对表格样式的支持情况。</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Markdown表格等宽列实现指南 &copy; 2023 - 选择适合您需求的方法创建美观的等宽列表格</p>
+        </footer>
+    </div>
 </body>
 </html>
