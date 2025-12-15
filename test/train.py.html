@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <!-- 引入marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .save-btn { background: transparent; border: none; color: transparent;}
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        .header { padding: 10px 20px; background: #333; color: 333; text-align: center; }
+        @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        ul, ol {
+            padding-left: 2em; /* 设置左侧缩进距离 */
+            margin: 1em 0; /* 上下外边距，增强与其他内容的间距 */
+        }
+
+        li {
+            margin: 0.5em 0; /* 列表项之间的间距 */
+        }
+
+        hr {
+            margin: 1.5em 0; /* 上下各1.5em的空白距离 */
+            border: none;
+            border-top: 1px solid #ddd; /* 分割线样式 */
+        }
+
+        /* 代码段样式 */
+        .explain-content pre {
+            background-color: #1e1e1e; /* 代码块背景色 */
+            border-radius: 6px;        /* 圆角 */
+            padding: 1em;              /* 内边距 */
+            margin: 1em 0;             /* 上下外边距 */
+            white-space: pre-wrap;     /* 允许自动换行（保留空白符但允许换行） */
+            word-wrap: break-word;     /* 长单词或URL自动换行 */
+        }
+
+        .explain-content code {
+            font-family: 'Consolas', 'Monaco', monospace; /* 等宽字体 */
+            font-size: 13px;           /* 字体大小 */
+            line-height: 1.5;          /* 行高 */
+            color: #dcdcdc;            /* 默认文字颜色 */
+            white-space: inherit;      /* 继承pre的换行设置 */
+        }
+
+        .code-content pre,
+        .code-content code {
+            /* 继承.code-content的样式 */
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;     /* 允许自动换行（保留空白符但允许换行） */
+            word-wrap: break-word;     /* 长单词或URL自动换行 */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+<div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block1" id="block1">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block2" id="block2">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block3" id="block3">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block4" id="block4">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block5" id="block5">
+            <div class="code-content"></div>
+        </div>
+</div>
+<div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block1" id="explainBlock1">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block2" id="explainBlock2">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block3" id="explainBlock3">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block4" id="explainBlock4">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block5" id="explainBlock5">
+            <div class="explain-content"></div>
+        </div>
+    </div>
+</div>
+    <script>
+        const blockCodeContents = {
+            block1 : `### block 1
+
+\`\`\`python
+import argparse
+import math
+import os
+import shutil
+
+import torch
+import torch.nn as nn
+import torch.optim.lr_scheduler
+from torchvision import datasets, transforms
+from tqdm import tqdm
+
+from net import AlexNetPlusLatent
+
+parser = argparse.ArgumentParser(description='Deep Hashing')
+parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
+                    help='learning rate (default: 0.01)')
+parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
+                    help='SGD momentum (default: 0.9)')
+parser.add_argument('--epoch', type=int, default=128, metavar='epoch',
+                    help='epoch')
+parser.add_argument('--pretrained', type=int, default=0, metavar='pretrained_model',
+                    help='loading pretrained model(default = None)')
+parser.add_argument('--bits', type=int, default=48, metavar='bts',
+                    help='binary bits')
+parser.add_argument('--path', type=str, default='model', metavar='P',
+                    help='path directory')
+args = parser.parse_args()
+
+
+\`\`\`
+`,
+block2 : `### block 2
+
+\`\`\`python
+def init_dataset():
+    transform_train = transforms.Compose(
+        [transforms.Resize(256),
+         transforms.RandomCrop(227),
+         transforms.RandomHorizontalFlip(),
+         transforms.ToTensor(),
+         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])
+    transform_test = transforms.Compose(
+        [transforms.Resize(227),
+         transforms.ToTensor(),
+         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])
+    trainset = datasets.CIFAR10(root='./data', train=True, download=True,
+                                transform=transform_train)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128,
+                                              shuffle=True, num_workers=0)
+
+    testset = datasets.CIFAR10(root='./data', train=False, download=True,
+                               transform=transform_test)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=100,
+                                             shuffle=True, num_workers=0)
+    return trainloader, testloader
+
+
+\`\`\`
+`,
+block3 : `### block 3
+
+\`\`\`python
+def train(epoch_num):
+    print('\nEpoch: %d' % epoch_num)
+    net.train()
+    train_loss = 0
+    correct = 0
+    total = 0
+    with tqdm(total=math.ceil(len(trainloader)), desc="Training") as pbar:
+        for batch_idx, (inputs, targets) in enumerate(trainloader):
+            inputs, targets = inputs.to(device), targets.to(device)
+            _, outputs = net(inputs)
+            loss = softmaxloss(outputs, targets)
+            optimizer4nn.zero_grad()
+            loss.backward()
+            optimizer4nn.step()
+            train_loss += softmaxloss(outputs, targets).item()
+            _, predicted = torch.max(outputs.data, 1)
+            total += targets.size(0)
+            correct += predicted.eq(targets.data).sum()
+            pbar.set_postfix({'loss': '{0:1.5f}'.format(loss), 'accurate': '{:.2%}'.format(correct.item() / total)})
+            pbar.update(1)
+    pbar.close()
+    return train_loss / (batch_idx + 1)
+
+
+\`\`\`
+`,
+block4 : `### block 4
+
+\`\`\`python
+def test():
+    with torch.no_grad():
+        test_loss = 0
+        correct = 0
+        total = 0
+        with tqdm(total=math.ceil(len(testloader)), desc="Testing") as pbar:
+            for batch_idx, (inputs, targets) in enumerate(testloader):
+                inputs, targets = inputs.to(device), targets.to(device)
+                _, outputs = net(inputs)
+                loss = softmaxloss(outputs, targets)
+                test_loss += loss.item()
+                _, predicted = torch.max(outputs.data, 1)
+                total += targets.size(0)
+                correct += predicted.eq(targets.data).sum()
+                pbar.set_postfix({'loss': '{0:1.5f}'.format(loss), 'accurate': '{:.2%}'.format(correct.item() / total)})
+                pbar.update(1)
+        pbar.close()
+        acc = 100 * int(correct) / int(total)
+        if epoch == args.epoch:
+            print('Saving')
+            if not os.path.isdir('{}'.format(args.path)):
+                os.mkdir('{}'.format(args.path))
+            torch.save(net.state_dict(), './{}/{}'.format(args.path, acc))
+
+
+\`\`\`
+`,
+block5 : `### block 5
+
+\`\`\`python
+if __name__ == '__main__':
+    torch.cuda.empty_cache()  # When using windows, this line is needed
+    trainloader, testloader = init_dataset()
+    net = AlexNetPlusLatent(args.bits)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print("Use device: " + str(device))
+    net.to(device)
+    softmaxloss = nn.CrossEntropyLoss().cuda()
+    optimizer4nn = torch.optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=0.0005)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer4nn, milestones=[args.epoch], gamma=0.1)
+    best_acc = 0
+    start_epoch = 1
+    if args.pretrained:
+        net.load_state_dict(torch.load('./{}/{}'.format(args.path, args.pretrained)))
+        test()
+    else:
+        if os.path.isdir('{}'.format(args.path)):
+            shutil.rmtree('{}'.format(args.path))
+        for epoch in range(start_epoch, start_epoch + args.epoch):
+            train(epoch)
+            test()
+            scheduler.step(epoch)
+
+
+\`\`\`
+`
+        };
+
+        const blockExplainContents = {
+            block1 : `### block 1
+
+`,
+block2 : `### block 2
+
+`,
+block3 : `### block 3
+
+`,
+block4 : `### block 4
+
+`,
+block5 : `### block 5
+
+`
+        };
+
+        // 获取blockCodeContents的item大小
+        const blockCodeContentsSize = Object.keys(blockCodeContents).length;
+        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
+
+
+        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
+        window.addEventListener('DOMContentLoaded', function() {
+            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
+            for (let i = 1; i <= blockCodeContentsSize; i++) {
+                const blockId = `block${i}`;
+                const explainBlockId = `explainBlock${i}`;
+
+                // 写入代码块内容
+                document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
+
+                // 写入解释块内容
+                document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+
+        const codeColumn = document.getElementById('codeColumn');
+    codeColumn.addEventListener('scroll', () => {
+        let active = null;
+        document.querySelectorAll('.code-block').forEach(block => {
+            const rect = block.getBoundingClientRect();
+            if (rect.top <= 200 && rect.bottom >= 200) active = block;
+        });
+        document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+        if (active) {
+            active.classList.add('active');
+            document.querySelector(`.explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+        }
+    });
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const currentPath = window.location.pathname;
+        const originalFileName = currentPath.split(/[\\/]/).pop();
+        const fileName = originalFileName
+                             ? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+                             : 'code_notes.html';
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+
+        this.textContent = 'save success';
+        setTimeout(() => this.textContent = 'save context', 1500);
+    });
+    </script>
+        </body>
+        </html>
