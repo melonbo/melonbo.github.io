@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <!-- 引入marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .save-btn { background: transparent; border: none; color: transparent;}
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        .header { padding: 10px 20px; background: #333; color: 333; text-align: center; }
+        @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        ul, ol {
+            padding-left: 2em;
+            margin: 1em 0;
+        }
+
+        li {
+            margin: 0.5em 0;
+        }
+
+        hr {
+            margin: 1.5em 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .explain-content pre {
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #dcdcdc;
+            white-space: inherit;
+        }
+
+        .code-content pre,
+        .code-content code {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content p code,
+        .explain-content li code {
+            background-color: #e0e0e0;
+            color: #ff5956 !important;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+<div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block1" id="block1">
+            <div class="code-content"></div>
+        </div>
+</div>
+<div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block1" id="explainBlock1">
+            <div class="explain-content"></div>
+        </div>
+    </div>
+</div>
+    <script>
+        const blockCodeContents = {
+            block1 : `
+\`\`\`python
+import os
+from shutil import copyfile
+
+# You only need to change this line to your dataset download path
+download_path = './Market-1501-v15.09.15'
+
+if not os.path.isdir(download_path):
+    print('please change the download_path')
+
+save_path = download_path + '/pytorch'
+if not os.path.isdir(save_path):
+    os.mkdir(save_path)
+#-----------------------------------------
+#query
+query_path = download_path + '/query'
+query_save_path = download_path + '/pytorch/query'
+if not os.path.isdir(query_save_path):
+    os.mkdir(query_save_path)
+
+for root, dirs, files in os.walk(query_path, topdown=True):
+    for name in files:
+        if not name[-3:]=='jpg':
+            continue
+        ID  = name.split('_')
+        src_path = query_path + '/' + name
+        dst_path = query_save_path + '/' + ID[0] 
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+        copyfile(src_path, dst_path + '/' + name)
+
+#-----------------------------------------
+#multi-query
+query_path = download_path + '/gt_bbox'
+# for dukemtmc-reid, we do not need multi-query
+if os.path.isdir(query_path):
+    query_save_path = download_path + '/pytorch/multi-query'
+    if not os.path.isdir(query_save_path):
+        os.mkdir(query_save_path)
+
+    for root, dirs, files in os.walk(query_path, topdown=True):
+        for name in files:
+            if not name[-3:]=='jpg':
+                continue
+            ID  = name.split('_')
+            src_path = query_path + '/' + name
+            dst_path = query_save_path + '/' + ID[0]
+            if not os.path.isdir(dst_path):
+                os.mkdir(dst_path)
+            copyfile(src_path, dst_path + '/' + name)
+
+#-----------------------------------------
+#gallery
+gallery_path = download_path + '/bounding_box_test'
+gallery_save_path = download_path + '/pytorch/gallery'
+if not os.path.isdir(gallery_save_path):
+    os.mkdir(gallery_save_path)
+
+for root, dirs, files in os.walk(gallery_path, topdown=True):
+    for name in files:
+        if not name[-3:]=='jpg':
+            continue
+        ID  = name.split('_')
+        src_path = gallery_path + '/' + name
+        dst_path = gallery_save_path + '/' + ID[0]
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+        copyfile(src_path, dst_path + '/' + name)
+
+#---------------------------------------
+#train_all
+train_path = download_path + '/bounding_box_train'
+train_save_path = download_path + '/pytorch/train_all'
+if not os.path.isdir(train_save_path):
+    os.mkdir(train_save_path)
+
+for root, dirs, files in os.walk(train_path, topdown=True):
+    for name in files:
+        if not name[-3:]=='jpg':
+            continue
+        ID  = name.split('_')
+        src_path = train_path + '/' + name
+        dst_path = train_save_path + '/' + ID[0]
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+        copyfile(src_path, dst_path + '/' + name)
+
+
+#---------------------------------------
+#train_val
+train_path = download_path + '/bounding_box_train'
+train_save_path = download_path + '/pytorch/train'
+val_save_path = download_path + '/pytorch/test'
+if not os.path.isdir(train_save_path):
+    os.mkdir(train_save_path)
+    os.mkdir(val_save_path)
+
+for root, dirs, files in os.walk(train_path, topdown=True):
+    for name in files:
+        if not name[-3:]=='jpg':
+            continue
+        ID  = name.split('_')
+        src_path = train_path + '/' + name
+        dst_path = train_save_path + '/' + ID[0]
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+            dst_path = val_save_path + '/' + ID[0]  #first image is used as val image
+            os.mkdir(dst_path)
+        copyfile(src_path, dst_path + '/' + name)
+\`\`\`
+`
+        };
+
+        const blockExplainContents = {
+            block1 : `
+## 代码功能概述
+
+这段代码主要用于**Market-1501数据集的预处理和重新组织**，将原始数据集按照PyTorch训练所需的目录结构进行整理。
+
+## 基础原理知识
+
+### 行人重识别（ReID）
+
+- **定义**：在不同摄像头视角下识别同一个行人的技术
+    
+- **数据集结构**：通常包含query（查询集）、gallery（图库集）、train（训练集）
+    
+- **Market-1501特点**：包含1501个行人ID，6个摄像头拍摄，32,668张图像
+    
+
+### 目录结构原理
+
+\`\`\`
+Market-1501-v15.09.15/
+├── query/           # 查询图像
+├── bounding_box_test/ # 图库图像  
+├── bounding_box_train/ # 训练图像
+└── pytorch/         # 处理后输出
+    ├── query/       # 按ID分类的查询图像
+    ├── gallery/     # 按ID分类的图库图像
+    ├── train_all/   # 全部训练数据
+    └── train/       # 训练集（划分后）
+    └── test/        # 验证集（划分后）
+\`\`\`
+
+## 代码逐段解析
+
+### 1. 初始设置和路径检查
+
+\`\`\`
+import os
+from shutil import copyfile
+
+download_path = './Market-1501-v15.09.15'
+if not os.path.isdir(download_path):
+    print('please change the download_path')
+\`\`\`
+
+- **技术栈**：\`os\`用于文件操作，\`shutil.copyfile\`用于文件复制
+    
+- **功能**：检查数据集路径是否存在
+    
+
+### 2. Query数据集处理
+
+\`\`\`
+query_path = download_path + '/query'
+query_save_path = download_path + '/pytorch/query'
+# 遍历query目录下的所有jpg文件
+for root, dirs, files in os.walk(query_path, topdown=True):
+    for name in files:
+        if not name[-3:]=='jpg':
+            continue
+        ID = name.split('_')  # 从文件名提取行人ID
+        src_path = query_path + '/' + name
+        dst_path = query_save_path + '/' + ID[0]  # 按ID创建子目录
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+        copyfile(src_path, dst_path + '/' + name)
+\`\`\`
+
+- **文件名格式**：\`0001_c1s1_001051_00.jpg\`
+    
+    - \`0001\`：行人ID
+        
+    - \`c1\`：摄像头1
+        
+    - \`s1\`：序列1
+        
+    - \`001051\`：帧编号
+        
+    - \`00\`：检测框编号
+        
+    
+
+### 3. Multi-query处理（可选）
+
+\`\`\`
+query_path = download_path + '/gt_bbox'
+if os.path.isdir(query_path):  # 检查目录是否存在
+    # 处理多查询图像（DukeMTMC不需要）
+\`\`\`
+
+- **多查询**：同一行人的多个查询图像，提高检索精度
+    
+
+### 4. Gallery数据集处理
+
+\`\`\`
+gallery_path = download_path + '/bounding_box_test'
+gallery_save_path = download_path + '/pytorch/gallery'
+\`\`\`
+
+- **Gallery**：包含所有待检索的图像库
+    
+- **功能**：将测试集图像按行人ID分类存储
+    
+
+### 5. 训练集完整备份
+
+\`\`\`
+train_path = download_path + '/bounding_box_train'
+train_save_path = download_path + '/pytorch/train_all'
+\`\`\`
+
+- 创建训练集的完整副本，便于后续使用
+    
+
+### 6. 训练/验证集划分
+
+\`\`\`
+for root, dirs, files in os.walk(train_path, topdown=True):
+    for name in files:
+        # 提取ID并创建目录
+        if not os.path.isdir(dst_path):
+            os.mkdir(dst_path)
+            dst_path = val_save_path + '/' + ID[0]  # 第一个图像作为验证集
+            os.mkdir(dst_path)
+\`\`\`
+
+- **划分策略**：每个行人的第一个图像作为验证集，其余作为训练集
+    
+- **优点**：确保训练集和验证集包含不同的图像样本
+    
+
+
+### 问题1: 内存不足
+
+**解决方案**：
+
+\`\`\`
+# 使用生成器逐批处理
+def process_files_batch(source_dir, target_dir, batch_size=1000):
+    file_list = [f for f in os.listdir(source_dir) if f.endswith('.jpg')]
+    for i in range(0, len(file_list), batch_size):
+        batch = file_list[i:i+batch_size]
+        process_batch(batch, source_dir, target_dir)
+\`\`\`
+
+`
+        };
+
+        // 获取blockCodeContents的item大小
+        const blockCodeContentsSize = Object.keys(blockCodeContents).length;
+        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
+
+
+        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
+        window.addEventListener('DOMContentLoaded', function() {
+            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
+            for (let i = 1; i <= blockCodeContentsSize; i++) {
+                const blockId = `block${i}`;
+                const explainBlockId = `explainBlock${i}`;
+
+                // 写入代码块内容
+                document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
+
+                // 写入解释块内容
+                document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+
+        const codeColumn = document.getElementById('codeColumn');
+    codeColumn.addEventListener('scroll', () => {
+        let active = null;
+        document.querySelectorAll('.code-block').forEach(block => {
+            const rect = block.getBoundingClientRect();
+            if (rect.top <= 200 && rect.bottom >= 200) active = block;
+        });
+        document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+        if (active) {
+            active.classList.add('active');
+            document.querySelector(`.explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+        }
+    });
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const currentPath = window.location.pathname;
+        const originalFileName = currentPath.split(/[\\/]/).pop();
+        const fileName = originalFileName
+                             ? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+                             : 'code_notes.html';
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+
+        this.textContent = 'save success';
+        setTimeout(() => this.textContent = 'save context', 1500);
+    });
+    </script>
+        </body>
+        </html>

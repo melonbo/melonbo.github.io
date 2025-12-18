@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://melonbo.github.io/css/pylit.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<div id="container">
+
+    <div class="section" id="section-0">
+        <div class="docs doc-strings">
+
+        </div>
+        <div class="code">
+
+        </div>
+    </div>
+
+
+
+    <div class="section" id="section-1">
+        <div class="docs doc-strings">
+
+        </div>
+        <div class="code">
+
+        </div>
+    </div>
+
+
+
+</div>
+    <script>
+        const blockCodeContents = {
+            block1 : `\`\`\`python
+# vim: expandtab:ts=4:sw=4
+import numpy as np
+
+
+\`\`\`
+`,
+block2 : `\`\`\`python
+class Detection(object):
+    """
+    This class represents a bounding box detection in a single image.
+
+    Parameters
+    ----------
+    tlwh : array_like
+        Bounding box in format \`(top left x, top left y, width, height)\`.
+    confidence : float
+        Detector confidence score.
+    feature : array_like
+        A feature vector that describes the object contained in this image.
+
+    Attributes
+    ----------
+    tlwh : ndarray
+        Bounding box in format \`(top left x, top left y, width, height)\`.
+    confidence : ndarray
+        Detector confidence score.
+    feature : ndarray | NoneType
+        A feature vector that describes the object contained in this image.
+
+    """
+
+    def __init__(self, tlwh, confidence, feature):
+        self.tlwh = np.asarray(tlwh, dtype=np.float)
+        self.confidence = float(confidence)
+        self.feature = np.asarray(feature, dtype=np.float32)
+
+    def to_tlbr(self):
+        """Convert bounding box to format \`(min x, min y, max x, max y)\`, i.e.,
+        \`(top left, bottom right)\`.
+        """
+        ret = self.tlwh.copy()
+        ret[2:] += ret[:2]
+        return ret
+
+    def to_xyah(self):
+        """Convert bounding box to format \`(center x, center y, aspect ratio,
+        height)\`, where the aspect ratio is \`width / height\`.
+        """
+        ret = self.tlwh.copy()
+        ret[:2] += ret[2:] / 2
+        ret[2] /= ret[3]
+        return ret
+
+\`\`\`
+`
+        };
+
+        const blockExplainContents = {
+            block1 : ``,
+block2 : ``
+        };
+
+        // 获取blockCodeContents的item大小
+        const blockCodeContentsSize = Object.keys(blockCodeContents).length;
+        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
+
+
+        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
+        window.addEventListener('DOMContentLoaded', function() {
+            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
+            for (let i = 0; i < blockCodeContentsSize; i++) {
+                const elementId = `section-${i}`;
+                const blockId = `block${i+1}`;
+                const explainBlockId = `explainBlock${i+1}`;
+
+                // 写入代码块内容
+                document.getElementById(elementId).querySelector('.docs').innerHTML = marked.parse(blockCodeContents[blockId]);
+
+                // 写入解释块内容
+                document.getElementById(elementId).querySelector('.code').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+
+    </script>
+        </body>
+        </html>
