@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>code notes</title>
-    <!-- 引入marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -114,6 +113,14 @@
         <div class="code-block" data-id="block1" id="block1">
             <div class="code-content"></div>
         </div>
+
+        <div class="code-block" data-id="block2" id="block2">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block3" id="block3">
+            <div class="code-content"></div>
+        </div>
 </div>
 <div class="explain-column" id="explainColumn">
         <div class="explain-block" data-id="block0" id="explainBlock0">
@@ -121,6 +128,14 @@
         </div>
 
         <div class="explain-block" data-id="block1" id="explainBlock1">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block2" id="explainBlock2">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block3" id="explainBlock3">
             <div class="explain-content"></div>
         </div>
     </div>
@@ -164,6 +179,11 @@ class Detection(object):
         self.confidence = float(confidence)
         self.feature = np.asarray(feature, dtype=np.float32)
 
+
+
+\`\`\`
+`,
+block2 : `\`\`\`
     def to_tlbr(self):
         """Convert bounding box to format \`(min x, min y, max x, max y)\`, i.e.,
         \`(top left, bottom right)\`.
@@ -172,6 +192,9 @@ class Detection(object):
         ret[2:] += ret[:2]
         return ret
 
+
+\`\`\``,
+block3 : `\`\`\`
     def to_xyah(self):
         """Convert bounding box to format \`(center x, center y, aspect ratio,
         height)\`, where the aspect ratio is \`width / height\`.
@@ -180,32 +203,95 @@ class Detection(object):
         ret[:2] += ret[2:] / 2
         ret[2] /= ret[3]
         return ret
-
-\`\`\`
-`
+\`\`\``
         };
 
         const blockExplainContents = {
-            block0 : ``,
-block1 : ``
+            block0 : `在计算机视觉中，边界框有几种常见表示：
+
+- **TLWH**​ (Top-Left Width-Height): \`(x, y, width, height)\`
+    
+- **TLBR**​ (Top-Left Bottom-Right): \`(x_min, y_min, x_max, y_max)\`
+    
+- **XYAH**​ (Center-X Center-Y Aspect-Ratio Height): \`(cx, cy, aspect_ratio, height)\`
+
+### DeepSORT中的数据流
+
+\`\`\`
+目标检测器 → Detection对象 → 特征匹配 → 轨迹跟踪
+\`\`\`
+`,
+block1 : `### 构造函数 \`__init__\`
+
+
+**参数解析**:
+
+- \`tlwh\`: 边界框的TLWH格式 \`[x, y, width, height]\`
+    
+- \`confidence\`: 检测器置信度分数
+    
+- \`feature\`: 目标的视觉特征向量`,
+block2 : `### 坐标转换方法 \`to_tlbr()\`
+
+**数学原理**:
+
+\`\`\`
+TLWH: [x, y, width, height]
+TLBR: [x, y, x+width, y+height]
+\`\`\`
+
+**转换过程**:
+
+\`\`\`
+tlwh = [100, 50, 64, 128]
+ret = [100, 50, 64, 128].copy()  # 创建副本避免修改原数据
+ret[2:] += ret[:2]               # [64,128] += [100,50] → [164,178]
+# 结果: [100, 50, 164, 178] → TLBR格式
+\`\`\`
+
+**使用场景**:
+
+- 图像绘制边界框
+    
+- IoU（交并比）计算
+    
+- 非极大值抑制（NMS）`,
+block3 : `### 坐标转换方法 \`to_xyah()\`
+
+
+**数学原理**:
+
+\`\`\`
+TLWH: [x, y, width, height]
+XYAH: [x+width/2, y+height/2, width/height, height]
+\`\`\`
+
+**转换过程**:
+
+\`\`\`
+# 假设 tlwh = [100, 50, 64, 128]
+ret = [100, 50, 64, 128].copy()  # 创建副本
+ret[:2] += ret[2:] / 2           # [100,50] += [32,64] → [132,114] (中心点)
+ret[2] /= ret[3]                 # 64/128 = 0.5 (宽高比)
+# 结果: [132, 114, 0.5, 128] → XYAH格式
+\`\`\`
+
+**使用场景**:
+
+- **卡尔曼滤波器**: DeepSORT使用XYAH格式进行运动预测
+    
+- **状态空间建模**: 更适合描述目标的运动状态`
         };
 
         // 获取blockCodeContents的item大小
         const blockCodeContentsSize = Object.keys(blockCodeContents).length;
         console.log('blockCodeContents的item大小:', blockCodeContentsSize);
 
-
-        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
         window.addEventListener('DOMContentLoaded', function() {
-            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
             for (let i = 0; i < blockCodeContentsSize; i++) {
                 const blockId = `block${i}`;
                 const explainBlockId = `explainBlock${i}`;
-
-                // 写入代码块内容
                 document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
-
-                // 写入解释块内容
                 document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
             }
         });
