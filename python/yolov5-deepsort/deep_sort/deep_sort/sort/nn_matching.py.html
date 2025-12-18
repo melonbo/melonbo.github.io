@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code notes</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .page-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .code-column { width: 45%; height: 100%; background: #1e1e1e; color: #dcdcdc; overflow-y: auto; padding: 20px; border-right: 1px solid #333; }
+        .explain-column { width: 55%; height: 100%; background: #f8f9fa; overflow-y: auto; padding: 20px; }
+        .code-block, .explain-block { margin-bottom: 30px; padding: 15px; border-radius: 8px; }
+        .code-block { background: #2d2d2d; position: relative; }
+        .explain-block { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-block h3 { color: #61afef; margin-bottom: 10px; font-size: 16px; }
+        .explain-block h3 { color: #2d3748; margin-bottom: 10px; font-size: 16px; }
+        .code-content { font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .explain-content { color: #4a5568; font-size: 14px; line-height: 1.8; }
+        .save-btn { background: transparent; border: none; color: transparent;}
+        .code-block.active { border: 2px solid #61afef; }
+        .explain-block.active { border-left: 4px solid #61afef; background: #f0f8ff; }
+        .header { padding: 10px 20px; background: #333; color: 333; text-align: center; }
+        @media (max-width: 768px) { .page-container { flex-direction: column; } .code-column, .explain-column { width: 100%; height: 50%; } }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        ul, ol {
+            padding-left: 2em;
+            margin: 1em 0;
+        }
+
+        li {
+            margin: 0.5em 0;
+        }
+
+        hr {
+            margin: 1.5em 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .explain-content h1, h2, h3, h4, h5, h6 {
+          margin: 30px 0 15px 0;
+        }
+
+        .explain-content pre {
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #dcdcdc;
+            white-space: inherit;
+        }
+
+        .code-content pre,
+        .code-content code {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content h1 code,
+        .explain-content h2 code,
+        .explain-content h3 code,
+        .explain-content h4 code,
+        .explain-content td code,
+        .explain-content p code,
+        .explain-content li code {
+            background-color: hsla(0, 0%, 80%, 0.0);
+            color: #ff5956 !important;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+<div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block0" id="block0">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block1" id="block1">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block2" id="block2">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block3" id="block3">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block4" id="block4">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block5" id="block5">
+            <div class="code-content"></div>
+        </div>
+
+        <div class="code-block" data-id="block6" id="block6">
+            <div class="code-content"></div>
+        </div>
+</div>
+<div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block0" id="explainBlock0">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block1" id="explainBlock1">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block2" id="explainBlock2">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block3" id="explainBlock3">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block4" id="explainBlock4">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block5" id="explainBlock5">
+            <div class="explain-content"></div>
+        </div>
+
+        <div class="explain-block" data-id="block6" id="explainBlock6">
+            <div class="explain-content"></div>
+        </div>
+    </div>
+</div>
+    <script>
+        const blockCodeContents = {
+            block0 : `\`\`\`python
+# vim: expandtab:ts=4:sw=4
+import numpy as np
+
+
+\`\`\`
+`,
+block1 : `\`\`\`python
+def _pdist(a, b):
+    """Compute pair-wise squared distance between points in \`a\` and \`b\`.
+
+    Parameters
+    ----------
+    a : array_like
+        An NxM matrix of N samples of dimensionality M.
+    b : array_like
+        An LxM matrix of L samples of dimensionality M.
+
+    Returns
+    -------
+    ndarray
+        Returns a matrix of size len(a), len(b) such that element (i, j)
+        contains the squared distance between \`a[i]\` and \`b[j]\`.
+
+    
+    用于计算成对点之间的平方距离
+    a ：NxM 矩阵，代表 N 个样本，每个样本 M 个数值 
+    b ：LxM 矩阵，代表 L 个样本，每个样本有 M 个数值 
+    返回的是 NxL 的矩阵，比如 dist[i][j] 代表 a[i] 和 b[j] 之间的平方和距离
+    参考：https://blog.csdn.net/frankzd/article/details/80251042
+
+    """
+    a, b = np.asarray(a), np.asarray(b)
+    if len(a) == 0 or len(b) == 0:
+        return np.zeros((len(a), len(b)))
+    a2, b2 = np.square(a).sum(axis=1), np.square(b).sum(axis=1)
+    r2 = -2. * np.dot(a, b.T) + a2[:, None] + b2[None, :]
+    r2 = np.clip(r2, 0., float(np.inf))
+    return r2
+
+
+\`\`\`
+`,
+block2 : `\`\`\`python
+def _cosine_distance(a, b, data_is_normalized=False):
+    """Compute pair-wise cosine distance between points in \`a\` and \`b\`.
+
+    Parameters
+    ----------
+    a : array_like
+        An NxM matrix of N samples of dimensionality M.
+    b : array_like
+        An LxM matrix of L samples of dimensionality M.
+    data_is_normalized : Optional[bool]
+        If True, assumes rows in a and b are unit length vectors.
+        Otherwise, a and b are explicitly normalized to lenght 1.
+
+    Returns
+    -------
+    ndarray
+        Returns a matrix of size len(a), len(b) such that eleement (i, j)
+        contains the squared distance between \`a[i]\` and \`b[j]\`.
+
+    用于计算成对点之间的余弦距离
+    a ：NxM 矩阵，代表 N 个样本，每个样本 M 个数值 
+    b ：LxM 矩阵，代表 L 个样本，每个样本有 M 个数值 
+    返回的是 NxL 的矩阵，比如 c[i][j] 代表 a[i] 和 b[j] 之间的余弦距离
+    参考：
+    https://blog.csdn.net/u013749540/article/details/51813922
+    
+
+    """
+    if not data_is_normalized:
+        # np.linalg.norm 求向量的范式，默认是 L2 范式 
+        a = np.asarray(a) / np.linalg.norm(a, axis=1, keepdims=True)
+        b = np.asarray(b) / np.linalg.norm(b, axis=1, keepdims=True)
+    return 1. - np.dot(a, b.T) # 余弦距离 = 1 - 余弦相似度
+
+
+\`\`\`
+`,
+block3 : `\`\`\`python
+def _nn_euclidean_distance(x, y):
+    """ Helper function for nearest neighbor distance metric (Euclidean).
+
+    Parameters
+    ----------
+    x : ndarray
+        A matrix of N row-vectors (sample points).
+    y : ndarray
+        A matrix of M row-vectors (query points).
+
+    Returns
+    -------
+    ndarray
+        A vector of length M that contains for each entry in \`y\` the
+        smallest Euclidean distance to a sample in \`x\`.
+
+    """
+    distances = _pdist(x, y)
+    return np.maximum(0.0, distances.min(axis=0))
+
+
+\`\`\`
+`,
+block4 : `\`\`\`python
+def _nn_cosine_distance(x, y):
+    """ Helper function for nearest neighbor distance metric (cosine).
+
+    Parameters
+    ----------
+    x : ndarray
+        A matrix of N row-vectors (sample points).
+    y : ndarray
+        A matrix of M row-vectors (query points).
+
+    Returns
+    -------
+    ndarray
+        A vector of length M that contains for each entry in \`y\` the
+        smallest cosine distance to a sample in \`x\`.
+
+    """
+    distances = _cosine_distance(x, y)
+    return distances.min(axis=0)
+
+
+\`\`\`
+`,
+block5 : `\`\`\`python
+class NearestNeighborDistanceMetric(object):
+    """
+    A nearest neighbor distance metric that, for each target, returns
+    the closest distance to any sample that has been observed so far.
+
+    对于每个目标，返回最近邻居的距离度量, 即与到目前为止已观察到的任何样本的最接近距离。
+
+    Parameters
+    ----------
+    metric : str
+        Either "euclidean" or "cosine".
+    matching_threshold: float
+        The matching threshold. Samples with larger distance are considered an
+        invalid match.
+        匹配阈值。 距离较大的样本对被认为是无效的匹配。
+    budget : Optional[int]
+        If not None, fix samples per class to at most this number. Removes
+        the oldest samples when the budget is reached.
+        如果不是None，则将每个类别的样本最多固定为该数字。 
+        删除达到budget时最古老的样本。
+
+    Attributes
+    ----------
+    samples : Dict[int -> List[ndarray]]
+        A dictionary that maps from target identities to the list of samples
+        that have been observed so far.
+        一个从目标ID映射到到目前为止已经观察到的样本列表的字典
+
+    """
+
+    def __init__(self, metric, matching_threshold, budget=None):
+
+
+        if metric == "euclidean":
+            self._metric = _nn_euclidean_distance # 欧式距离
+        elif metric == "cosine":
+            self._metric = _nn_cosine_distance # 余弦距离
+        else:
+            raise ValueError(
+                "Invalid metric; must be either 'euclidean' or 'cosine'")
+        self.matching_threshold = matching_threshold
+        self.budget = budget # budge用于控制 feature 的数目
+        self.samples = {}
+
+    def partial_fit(self, features, targets, active_targets):
+        """Update the distance metric with new data.
+        用新的数据更新测量距离
+
+        Parameters
+        ----------
+        features : ndarray
+            An NxM matrix of N features of dimensionality M.
+        targets : ndarray
+            An integer array of associated target identities.
+        active_targets : List[int]
+            A list of targets that are currently present in the scene.
+        传入特征列表及其对应id，partial_fit构造一个活跃目标的特征字典。
+
+        """
+        for feature, target in zip(features, targets):
+            # 对应目标下添加新的feature，更新feature集合
+            # samples字典    d: feature list}
+            self.samples.setdefault(target, []).append(feature)
+            if self.budget is not None:
+                # 只考虑budget个目标，超过直接忽略
+                self.samples[target] = self.samples[target][-self.budget:]
+        
+        # 筛选激活的目标；samples是一个字典{id->feature list}
+        self.samples = {k: self.samples[k] for k in active_targets}
+
+    def distance(self, features, targets):
+        """Compute distance between features and targets.
+
+        Parameters
+        ----------
+        features : ndarray
+            An NxM matrix of N features of dimensionality M.
+        targets : List[int]
+            A list of targets to match the given \`features\` against.
+
+        Returns
+        -------
+        ndarray
+            Returns a cost matrix of shape len(targets), len(features), where
+            element (i, j) contains the closest squared distance between
+            \`targets[i]\` and \`features[j]\`.
+        
+        计算features和targets之间的距离，返回一个成本矩阵（代价矩阵）
+        """
+        cost_matrix = np.zeros((len(targets), len(features)))
+        for i, target in enumerate(targets):
+            cost_matrix[i, :] = self._metric(self.samples[target], features)
+        return cost_matrix
+
+\`\`\`
+`,
+block6 : ``
+        };
+
+        const blockExplainContents = {
+            block0 : `## 代码功能概述
+
+这个模块实现了**最近邻距离度量**，用于计算检测目标与现有轨迹之间的相似度，是DeepSORT算法中数据关联的关键部分。
+
+## 基础原理知识
+
+### 多目标跟踪中的数据关联
+
+- **问题**：如何将当前帧的检测结果与现有轨迹正确匹配
+    
+- **解决方案**：使用距离度量计算相似度，选择最匹配的轨迹
+    
+- **常用度量**：欧氏距离、余弦距离
+    
+
+### 特征匹配流程
+
+\`\`\`
+当前帧检测特征 → 距离计算 → 现有轨迹特征库 → 匹配决策
+\`\`\`
+`,
+block1 : `**数学原理**（欧氏距离平方）：
+
+\`\`\`
+距离² = Σ(x_i - y_i)² 
+      = Σ(x_i² - 2x_iy_i + y_i²)
+      = Σx_i² + Σy_i² - 2Σx_iy_i
+\`\`\`
+`,
+block2 : `**数学原理**：
+
+\`\`\`
+余弦相似度 = (A·B) / (||A|| * ||B||)
+余弦距离 = 1 - 余弦相似度
+\`\`\`
+`,
+block3 : `**返回y中每个点与x中最近点的最小欧氏距离**`,
+block4 : `**返回y中每个点与x中最近点的最小余弦距离**`,
+block5 : `### 1. 初始化方法
+
+\`\`\`
+def __init__(self, metric, matching_threshold, budget=None):
+    if metric == "euclidean":
+        self._metric = _nn_euclidean_distance
+    elif metric == "cosine":
+        self._metric = _nn_cosine_distance
+    self.matching_threshold = matching_threshold
+    self.budget = budget
+    self.samples = {}  # {target_id: [feature1, feature2, ...]}
+\`\`\`
+
+**参数说明**：
+
+- \`metric\`: 距离度量类型（"euclidean"或"cosine"）
+    
+- \`matching_threshold\`: 匹配阈值，距离大于此值认为不匹配
+    
+- \`budget\`: 每个目标最多保存的特征数（防止内存无限增长）
+    
+
+### 2. 特征更新方法 \`partial_fit\`
+
+\`\`\`
+def partial_fit(self, features, targets, active_targets):
+    for feature, target in zip(features, targets):
+        self.samples.setdefault(target, []).append(feature)
+        if self.budget is not None:
+            self.samples[target] = self.samples[target][-self.budget:]
+    
+    # 只保留活跃目标的特征
+    self.samples = {k: self.samples[k] for k in active_targets}
+\`\`\`
+
+**工作流程**：
+
+\`\`\`
+# 示例使用
+features = [feat1, feat2, feat3]  # 当前帧检测特征
+targets = [1, 2, 1]               # 对应的轨迹ID
+active_targets = [1, 2, 3]        # 当前活跃的轨迹
+
+# 更新后samples字典：
+# {
+#     1: [old_feat1, feat1, feat3],  # ID1新增两个特征
+#     2: [old_feat2, feat2]          # ID2新增一个特征
+# }
+# ID3不在features中，但因为是活跃目标，保留原有特征
+\`\`\`
+
+#### self.samples = {k: self.samples[k] for k in active_targets}
+
+
+这个语句使用了字典推导式（Dictionary Comprehension），我们可以通过下面的表格来理解其每个部分的作用：
+
+|代码片段|解释|
+|---|---|
+|\`active_targets\`|一个列表，包含了当前帧中所有**已确认**（confirmed）状态的跟踪目标的 ID。|
+|\`for k in active_targets\`|遍历 \`active_targets\`列表中的每一个目标 ID（作为键 \`k\`）。|
+|\`self.samples[k]\`|从原有的特征字典 \`self.samples\`中，获取键 \`k\`对应的值。这个值通常是该目标的历史外观特征向量列表。|
+|\`{k: self.samples[k] for ... }\`|构建一个新的字典，只包含那些键 \`k\`出现在 \`active_targets\`中的键值对。|
+|\`self.samples = ...\`|将新生成的字典重新赋值给 \`self.samples\`，覆盖原来的旧字典。|
+
+**通俗来讲**：这行代码就像一次“大扫除”，检查特征库（\`self.samples\`）里所有住户（目标 ID），只留下那些当前仍在屋里（活跃目标）的住户信息，把已经搬走（跟踪失败或目标消失）的住户信息全部清理掉。
+
+### 💡 设计目的与原理
+
+在 DeepSORT 中，\`self.samples\`是一个核心数据结构，用于存储每个跟踪目标的历史外观特征（feature），其形式通常为 \`{track_id: [feature1, feature2, ...]}\`。这行代码的设计主要基于以下两个重要原因：
+
+1. **优化内存占用**：跟踪过程是动态的，目标会不断出现和消失。如果不及时清理，\`self.samples\`字典会越来越大，保存大量无效数据。通过只保留活跃目标，可以有效控制内存消耗。
+    
+2. **提升匹配效率**：在后续的帧中，需要进行数据关联（将检测框匹配到已有的跟踪轨迹）。距离度量（由 \`NearestNeighborDistanceMetric\`类负责）会计算当前检测特征与 \`self.samples\`中所有特征的距离。清理掉非活跃目标后，参与计算的样本数量减少，可以显著提高匹配速度。
+    
+
+这个操作通常发生在每次跟踪更新（\`update\`）的最后阶段，在完成了匹配、创建新轨迹、标记丢失轨迹等一系列操作后，获取当前最新的活跃目标列表，然后对特征库进行清理。
+
+### 3. 距离计算核心方法 \`distance\`
+
+\`\`\`
+def distance(self, features, targets):
+    cost_matrix = np.zeros((len(targets), len(features)))
+    for i, target in enumerate(targets):
+        cost_matrix[i, :] = self._metric(self.samples[target], features)
+    return cost_matrix
+\`\`\`
+
+**成本矩阵生成**：
+
+\`\`\`
+假设：
+- targets = [1, 2]（两个现有轨迹）
+- features = [f1, f2, f3]（三个当前检测）
+
+成本矩阵结构：
+        f1   f2   f3
+轨迹1  d11  d12  d13
+轨迹2  d21  d22  d23
+
+其中dij = 轨迹i与检测j的最小距离
+\`\`\`
+`,
+block6 : `## 实际应用示例
+
+### 在DeepSORT中的完整使用流程
+
+\`\`\`
+# 初始化距离度量器
+metric = NearestNeighborDistanceMetric(
+    metric="cosine", 
+    matching_threshold=0.2, 
+    budget=100
+)
+
+# 跟踪循环
+for frame in video_frames:
+    # 1. 检测当前帧目标
+    detections = detector(frame)
+    features = extractor.extract(detections)
+    
+    # 2. 预测现有轨迹位置
+    tracks.predict()
+    
+    # 3. 计算距离成本矩阵
+    active_targets = [t.track_id for t in tracks if t.is_confirmed()]
+    cost_matrix = metric.distance(features, active_targets)
+    
+    # 4. 数据关联（匈牙利算法等）
+    matches, unmatched_detections, unmatched_tracks = matching(cost_matrix)
+    
+    # 5. 更新轨迹特征库
+    metric.partial_fit(features, matched_targets, active_targets)
+\`\`\`
+
+## 关键技术原理
+
+### 1. Budget机制（特征库管理）
+
+\`\`\`
+# 防止内存无限增长
+if self.budget is not None:
+    self.samples[target] = self.samples[target][-self.budget:]
+\`\`\`
+
+- **问题**：长时间跟踪会导致特征库无限增长
+    
+- **解决方案**：每个目标只保留最近N个特征（FIFO）
+    
+- **平衡**：保存足够特征以适应外观变化，但不占用过多内存
+    
+
+### 2. 最近邻匹配策略
+
+\`\`\`
+# 不是计算平均距离，而是最小距离
+min_distance = distances.min(axis=0)
+\`\`\`
+
+- **优点**：对部分遮挡和外观变化更鲁棒
+    
+- **原理**：只要有一个历史特征与当前检测相似，就认为匹配
+    
+
+### 3. 激活目标过滤
+
+\`\`\`
+self.samples =k: self.samples[k] for k in active_targets}
+\`\`\`
+
+- **内存优化**：只保留当前活跃轨迹的特征
+    
+- **性能提升**：减少不必要的距离计算
+    `
+        };
+
+        // 获取blockCodeContents的item大小
+        const blockCodeContentsSize = Object.keys(blockCodeContents).length;
+        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
+
+        window.addEventListener('DOMContentLoaded', function() {
+            for (let i = 0; i < blockCodeContentsSize; i++) {
+                const blockId = `block${i}`;
+                const explainBlockId = `explainBlock${i}`;
+                document.getElementById(blockId).querySelector('.code-content').innerHTML = marked.parse(blockCodeContents[blockId]);
+                document.getElementById(explainBlockId).querySelector('.explain-content').innerHTML = marked.parse(blockExplainContents[blockId]);
+            }
+        });
+
+        const codeColumn = document.getElementById('codeColumn');
+    codeColumn.addEventListener('scroll', () => {
+        let active = null;
+        document.querySelectorAll('.code-block').forEach(block => {
+            const rect = block.getBoundingClientRect();
+            if (rect.top <= 200 && rect.bottom >= 200) active = block;
+        });
+        document.querySelectorAll('.code-block, .explain-block').forEach(el => el.classList.remove('active'));
+        if (active) {
+            active.classList.add('active');
+            document.querySelector(`.explain-block[data-id="${active.dataset.id}"]`).classList.add('active');
+        }
+    });
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const currentPath = window.location.pathname;
+        const originalFileName = currentPath.split(/[\\/]/).pop();
+        const fileName = originalFileName
+                             ? (originalFileName.endsWith('.html') ? originalFileName : `${originalFileName}.html`)
+                             : 'code_notes.html';
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+
+        this.textContent = 'save success';
+        setTimeout(() => this.textContent = 'save context', 1500);
+    });
+    </script>
+        </body>
+        </html>
