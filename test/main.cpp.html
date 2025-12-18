@@ -51,11 +51,66 @@
         tr:hover {
             background-color: #f1f8ff;
         }
+
+        ul, ol {
+            padding-left: 2em;
+            margin: 1em 0;
+        }
+
+        li {
+            margin: 0.5em 0;
+        }
+
+        hr {
+            margin: 1.5em 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .explain-content pre {
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #dcdcdc;
+            white-space: inherit;
+        }
+
+        .code-content pre,
+        .code-content code {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .explain-content p code,
+        .explain-content li code {
+            background-color: #e0e0e0;
+            color: #ff5956 !important;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
     <div class="page-container">
 <div class="code-column" id="codeColumn">
+        <div class="code-block" data-id="block0" id="block0">
+            <div class="code-content"></div>
+        </div>
+
         <div class="code-block" data-id="block1" id="block1">
             <div class="code-content"></div>
         </div>
@@ -75,12 +130,12 @@
         <div class="code-block" data-id="block5" id="block5">
             <div class="code-content"></div>
         </div>
-
-        <div class="code-block" data-id="block6" id="block6">
-            <div class="code-content"></div>
-        </div>
 </div>
 <div class="explain-column" id="explainColumn">
+        <div class="explain-block" data-id="block0" id="explainBlock0">
+            <div class="explain-content"></div>
+        </div>
+
         <div class="explain-block" data-id="block1" id="explainBlock1">
             <div class="explain-content"></div>
         </div>
@@ -100,17 +155,11 @@
         <div class="explain-block" data-id="block5" id="explainBlock5">
             <div class="explain-content"></div>
         </div>
-
-        <div class="explain-block" data-id="block6" id="explainBlock6">
-            <div class="explain-content"></div>
-        </div>
     </div>
 </div>
     <script>
         const blockCodeContents = {
-            block1 : `### block 1 : 1 - 6
-
-\`\`\`cpp
+            block0 : `\`\`\`cpp
 int sum(int a,int b)
 {
 	int temp=0;
@@ -119,9 +168,7 @@ int sum(int a,int b)
 }
 \`\`\`
 `,
-block2 : `### block 2 : 8 - 15
-
-\`\`\`cpp
+block1 : `\`\`\`cpp
 int main()
 {
 	int a=10;
@@ -132,9 +179,7 @@ int main()
 }
 \`\`\`
 `,
-block3 : `### block 3 : 18 - 23
-
-\`\`\`cpp
+block2 : `\`\`\`cpp
 int sum(int a,int b)
 {
 	int temp=0;
@@ -143,9 +188,7 @@ int sum(int a,int b)
 }
 \`\`\`
 `,
-block4 : `### block 4 : 25 - 32
-
-\`\`\`cpp
+block3 : `\`\`\`cpp
 int main()
 {
 	int a=10;
@@ -156,9 +199,7 @@ int main()
 }
 \`\`\`
 `,
-block5 : `### block 5 : 34 - 39
-
-\`\`\`cpp
+block4 : `\`\`\`cpp
 int sum(int a,int b)
 {
 	int temp=0;
@@ -167,9 +208,7 @@ int sum(int a,int b)
 }
 \`\`\`
 `,
-block6 : `### block 6 : 41 - 48
-
-\`\`\`cpp
+block5 : `\`\`\`cpp
 int main()
 {
 	int a=10;
@@ -183,24 +222,35 @@ int main()
         };
 
         const blockExplainContents = {
-            block1 : `### block 1
+            block0 : `找不到上传按钮通常是因为**AppID配置错误**导致的。请按照以下步骤解决：
 
-`,
-block2 : `### block 2
+## 检查AppID配置
 
-`,
-block3 : `### block 3
+1. **登录微信公众平台**（https://mp.weixin.qq.com/），使用注册小程序时绑定的邮箱登录，不要使用测试号
 
-`,
-block4 : `### block 4
+2. **获取正确的AppID**：在左侧菜单找到"开发"→"开发设置"，复制你的小程序AppID
 
-`,
-block5 : `### block 5
+3. **修改项目配置**：
+   - 在微信开发者工具中，点击顶部菜单"工具"→"项目设置"
+   - 在"设置"选项卡中，将AppID修改为正确的AppID
+   - 同时检查\`app.json\`文件中的AppID配置，确保与项目设置一致
 
-`,
-block6 : `### block 6
+4. **重新打开项目**：修改AppID后，可能需要重启开发者工具或重新打开项目，上传按钮就会显示出来
 
-`
+## 上传按钮位置
+
+上传按钮位于微信开发者工具**右上角的工具栏**中，通常在"清缓存"按钮的右侧。如果AppID配置正确，工具栏会显示"上传"按钮
+
+## 注意事项
+
+- 如果创建项目时使用的是测试号AppID，上传按钮不会显示
+- 确保登录的账号有上传权限，管理员或绑定的开发者账号才能上传
+- 上传前需要先完成代码编译，确保没有语法`,
+block1 : ``,
+block2 : ``,
+block3 : ``,
+block4 : ``,
+block5 : ``
         };
 
         // 获取blockCodeContents的item大小
@@ -211,7 +261,7 @@ block6 : `### block 6
         // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
         window.addEventListener('DOMContentLoaded', function() {
             // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
-            for (let i = 1; i <= blockCodeContentsSize; i++) {
+            for (let i = 0; i < blockCodeContentsSize; i++) {
                 const blockId = `block${i}`;
                 const explainBlockId = `explainBlock${i}`;
 
