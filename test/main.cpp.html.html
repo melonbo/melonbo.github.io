@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="pylit.css">
+    <title>code notes</title>
+    <link rel="stylesheet" href="https://melonbo.github.io/css/pylit.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
@@ -56,17 +56,6 @@
 
 
     <div class="section" id="section-4">
-        <div class="docs doc-strings">
-
-        </div>
-        <div class="code">
-
-        </div>
-    </div>
-
-
-
-    <div class="section" id="section-5">
         <div class="docs doc-strings">
 
         </div>
@@ -128,69 +117,24 @@ int sum(int a,int b)
 	return temp;
 }
 \`\`\`
-`,
-block6 : `\`\`\`cpp
-int main()
-{
-	int a=10;
-	int b=20;
- 
-	int ret=sum(a,b);
-	return 0;
-}
-\`\`\`
 `
         };
 
         const blockExplainContents = {
-            block1 : `找不到上传按钮通常是因为**AppID配置错误**导致的。请按照以下步骤解决：
-
-## 检查AppID配置
-
-1. **登录微信公众平台**（https://mp.weixin.qq.com/），使用注册小程序时绑定的邮箱登录，不要使用测试号
-
-2. **获取正确的AppID**：在左侧菜单找到"开发"→"开发设置"，复制你的小程序AppID
-
-3. **修改项目配置**：
-   - 在微信开发者工具中，点击顶部菜单"工具"→"项目设置"
-   - 在"设置"选项卡中，将AppID修改为正确的AppID
-   - 同时检查\`app.json\`文件中的AppID配置，确保与项目设置一致
-
-4. **重新打开项目**：修改AppID后，可能需要重启开发者工具或重新打开项目，上传按钮就会显示出来
-
-## 上传按钮位置
-
-上传按钮位于微信开发者工具**右上角的工具栏**中，通常在"清缓存"按钮的右侧。如果AppID配置正确，工具栏会显示"上传"按钮
-
-## 注意事项
-
-- 如果创建项目时使用的是测试号AppID，上传按钮不会显示
-- 确保登录的账号有上传权限，管理员或绑定的开发者账号才能上传
-- 上传前需要先完成代码编译，确保没有语法`,
+            block1 : ``,
 block2 : ``,
 block3 : ``,
 block4 : ``,
-block5 : ``,
-block6 : ``
+block5 : ``
         };
 
-        // 获取blockCodeContents的item大小
         const blockCodeContentsSize = Object.keys(blockCodeContents).length;
-        console.log('blockCodeContents的item大小:', blockCodeContentsSize);
-
-
-        // 页面加载完成后，使用marked.parse将代码和解释写入到对应的div中
         window.addEventListener('DOMContentLoaded', function() {
-            // 使用循环写入所有代码块和解释块内容，循环上限使用blockCodeContents的实际大小
             for (let i = 0; i < blockCodeContentsSize; i++) {
                 const elementId = `section-${i}`;
                 const blockId = `block${i+1}`;
                 const explainBlockId = `explainBlock${i+1}`;
-
-                // 写入代码块内容
                 document.getElementById(elementId).querySelector('.docs').innerHTML = marked.parse(blockCodeContents[blockId]);
-
-                // 写入解释块内容
                 document.getElementById(elementId).querySelector('.code').innerHTML = marked.parse(blockExplainContents[blockId]);
             }
         });
